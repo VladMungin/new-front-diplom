@@ -1,5 +1,9 @@
+import { TaskCard } from '@/entities/task';
+
 export const TasksPage = () => {
-  return <div className=''>TASKS</div>
-}
-
-
+	return (
+		<div className=''>
+			<TaskCard />
+		</div>
+	);
+};
