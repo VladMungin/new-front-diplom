@@ -30,7 +30,7 @@ export const RegisterPage = () => {
 				<Form
 					className='flex flex-col gap-3 py-3'
 					control={control}
-					onSubmit={handleSubmit(onSubmit)}
+					onSubmit={() => handleSubmit(onSubmit)}
 				>
 					<Input.Wrapper label='Email'>
 						<Controller
