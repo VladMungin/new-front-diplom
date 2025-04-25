@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { useSetAtom } from 'jotai';
 import { useCookies } from 'react-cookie';
 import { userStore } from './_store';
@@ -18,7 +17,7 @@ export const useAuth = () => {
 		},
 		onSuccess: data => {
 			setCookie('access_token', data.accessToken, {
-				expires: dayjs(2 * 7 * 24 * 60 * 60 * 60).toDate(),
+				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.user);
 		},
@@ -30,7 +29,7 @@ export const useAuth = () => {
 		},
 		onSuccess: data => {
 			setCookie('access_token', data.accessToken, {
-				expires: dayjs(2 * 7 * 24 * 60 * 60 * 60).toDate(),
+				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.user);
 		},

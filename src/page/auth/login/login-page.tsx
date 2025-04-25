@@ -2,7 +2,7 @@
 
 import { Auth, useAuth } from '@/entities/user';
 import { Button, Card, CardSection, Input, PasswordInput } from '@mantine/core';
-import { Controller, Form, useForm } from 'react-hook-form';
+import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
 export const LoginPage = () => {
@@ -10,8 +10,8 @@ export const LoginPage = () => {
 
 	const { loginData } = useAuth();
 
-	const onSubmit = async (data: Auth) => {
-		const result = await loginData.mutateAsync(data);
+	const onSubmit: FormSubmitHandler<Auth> = async data => {
+		const result = await loginData.mutateAsync(data.data);
 
 		console.log(result.user);
 	};

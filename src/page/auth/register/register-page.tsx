@@ -2,21 +2,21 @@
 
 import { Auth, useAuth } from '@/entities/user';
 import { Button, Card, CardSection, Input, PasswordInput } from '@mantine/core';
-import { Controller, Form, useForm } from 'react-hook-form';
+import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
 export const RegisterPage = () => {
-	const { control, handleSubmit } = useForm<Auth>();
+	const { control } = useForm<Auth>();
 
 	const { registerData } = useAuth();
 
-	const onSubmit = async (data: Auth) => {
-		const result = await registerData.mutateAsync(data);
+	const onSubmit: FormSubmitHandler<Auth> = async data => {
+		const result = await registerData.mutateAsync(data.data);
 
 		console.log(result.user);
 	};
 
-	return (
+return (
 		<div className='w-full h-screen flex items-center justify-center '>
 			<Card
 				className='mx-auto max-w-[860px] w-full mb-[150px]'
@@ -30,7 +30,7 @@ export const RegisterPage = () => {
 				<Form
 					className='flex flex-col gap-3 py-3'
 					control={control}
-					onSubmit={() => handleSubmit(onSubmit)}
+					onSubmit={onSubmit}
 				>
 					<Input.Wrapper label='Email'>
 						<Controller
@@ -64,7 +64,7 @@ export const RegisterPage = () => {
 							name='companyName'
 							control={control}
 							render={({ field }) => {
-								return <Input {...field}  />;
+								return <Input {...field} />;
 							}}
 						/>
 					</Input.Wrapper>
