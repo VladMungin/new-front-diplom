@@ -12,7 +12,6 @@ import {
 	AppShell,
 	Burger,
 	NavLink,
-	useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
@@ -25,7 +24,7 @@ interface NavbarProps {
 export const Navbar = ({ children }: NavbarProps) => {
 	const [opened, { toggle }] = useDisclosure();
 
-	const { colorScheme, setColorScheme } = useMantineColorScheme();
+	// const { colorScheme, setColorScheme } = useMantineColorScheme();
 
 	const pathname = usePathname();
 
