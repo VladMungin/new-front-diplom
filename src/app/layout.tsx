@@ -6,7 +6,6 @@ import type { ReactNode } from 'react';
 
 import { Navbar } from '@/widgets/navbar';
 
-import { Container } from '@mantine/core';
 import { WithProviders } from './__providers__';
 
 export const metadata: Metadata = {
@@ -18,7 +17,7 @@ export const RootLayout = ({ children }: Readonly<{ children: ReactNode }>) => (
 	<html lang='ru'>
 		<body>
 			<WithProviders>
-					<Navbar>{children}</Navbar>
+				<Navbar>{children}</Navbar>
 			</WithProviders>
 		</body>
 	</html>

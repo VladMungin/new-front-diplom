@@ -5,13 +5,13 @@ import { Button, Card, CardSection, Input, PasswordInput } from '@mantine/core';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
-export const RegisterPage = () => {
-	const { control, handleSubmit } = useForm<Auth>();
+export const LoginPage = () => {
+	const { control } = useForm<Auth>();
 
-	const { registerData } = useAuth();
+	const { loginData } = useAuth();
 
 	const onSubmit = async (data: Auth) => {
-		const result = await registerData.mutateAsync(data);
+		const result = await loginData.mutateAsync(data);
 
 		console.log(result.user);
 	};
@@ -25,12 +25,12 @@ export const RegisterPage = () => {
 				withBorder
 			>
 				<CardSection withBorder className='!flex !flex-col !items-center !py-1'>
-					<h3 className='text-2xl font-bold my-3'>Регистрация</h3>
+					<h3 className='text-2xl font-bold my-3'>Авторизация</h3>
 				</CardSection>
 				<Form
 					className='flex flex-col gap-3 py-3'
 					control={control}
-					onSubmit={() => handleSubmit(onSubmit)}
+					onSubmit={onSubmit}
 				>
 					<Input.Wrapper label='Email'>
 						<Controller
@@ -64,15 +64,15 @@ export const RegisterPage = () => {
 							name='companyName'
 							control={control}
 							render={({ field }) => {
-								return <Input {...field}  />;
+								return <Input {...field} />;
 							}}
 						/>
 					</Input.Wrapper>
 					<Button fullWidth type='submit'>
-						{registerData.isPending ? (
+						{loginData.isPending ? (
 							<AiOutlineLoading className='animate-spin' />
 						) : (
-							'Зарегистрироваться'
+							'Авторизоваться'
 						)}
 					</Button>
 				</Form>
