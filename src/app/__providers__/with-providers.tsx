@@ -1,8 +1,14 @@
-'use client'
+'use client';
 
-import { composeProviders } from '@/shared/helpers'
-import { WithJotai } from './_with-jotai'
-import { WithMantine } from './_with-mantine'
-import { WithTanstackQuery } from './_with-tanstack-query'
+import { composeProviders } from '@/shared/helpers';
+import { WithCookies } from './_with-cookies';
+import { WithJotai } from './_with-jotai';
+import { WithMantine } from './_with-mantine';
+import { WithTanstackQuery } from './_with-tanstack-query';
 
-export const WithProviders = composeProviders(WithMantine, WithTanstackQuery, WithJotai)
+export const WithProviders = composeProviders(
+	WithMantine,
+	WithTanstackQuery,
+	WithJotai,
+	WithCookies
+);

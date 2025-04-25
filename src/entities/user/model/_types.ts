@@ -1,5 +1,5 @@
-import { Employee } from '@/entities/employee'
-import { Project } from '@/entities/project'
+import { Employee } from '@/entities/employee';
+import { Project } from '@/entities/project';
 
 export interface User {
 	id: string;
@@ -31,4 +31,16 @@ interface Role {
 	canEditRole: boolean;
 	user: User[];
 	employee: Employee[];
+}
+
+export interface Auth {
+	email: string;
+	name: string;
+	password: string;
+	companyName: string;
+}
+
+export interface AuthRequest {
+	user: User;
+	accessToken: string;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { Task, TaskCard } from '@/entities/task';
 import {
 	Accordion,

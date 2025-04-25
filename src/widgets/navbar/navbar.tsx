@@ -15,6 +15,7 @@ import {
 	useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { usePathname } from 'next/navigation';
 import { CgProfile } from 'react-icons/cg';
 
 interface NavbarProps {
@@ -26,10 +27,18 @@ export const Navbar = ({ children }: NavbarProps) => {
 
 	const { colorScheme, setColorScheme } = useMantineColorScheme();
 
+	const pathname = usePathname();
+
+	const offNavbar = !pathname.includes('/auth');
+
 	return (
 		<AppShell
 			header={{ height: 60 }}
-			navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+			navbar={{
+				width: offNavbar ? 300 : 0,
+				breakpoint: 'sm',
+				collapsed: { mobile: !opened },
+			}}
 			padding='md'
 		>
 			<AppShell.Header className='flex items-center justify-between px-7.5'>
@@ -58,47 +67,49 @@ export const Navbar = ({ children }: NavbarProps) => {
             onChange={() => {
               setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')
             }}
-          /> */}
+						/> */}
 				</div>
 				<Link href='/profile'>
 					<CgProfile className='w-[40px] h-[40px] cursor-pointer' />
 				</Link>
 			</AppShell.Header>
 
-			<AppShell.Navbar p='md'>
-				{Pages.map((page, index) => {
-					if (page.items?.length) {
+			{offNavbar && (
+				<AppShell.Navbar p='md'>
+					{Pages.map((page, index) => {
+						if (page.items?.length) {
+							return (
+								<Accordion key={index}>
+									<AccordionItem key={index} value={page.label}>
+										<AccordionControl>
+											<h2>{page.label}</h2>
+										</AccordionControl>
+										<AccordionPanel>
+											{page.items.map(item => {
+												return (
+													<NavLink
+														label={item.label}
+														href={item.href}
+														key={`${index}-${item.label}`}
+													/>
+												);
+											})}
+										</AccordionPanel>
+									</AccordionItem>
+								</Accordion>
+							);
+						}
 						return (
-							<Accordion key={index}>
-								<AccordionItem key={index} value={page.label}>
-									<AccordionControl>
-										<h2>{page.label}</h2>
-									</AccordionControl>
-									<AccordionPanel>
-										{page.items.map(item => {
-											return (
-												<NavLink
-													label={item.label}
-													href={item.href}
-													key={`${index}-${item.label}`}
-												/>
-											);
-										})}
-									</AccordionPanel>
-								</AccordionItem>
-							</Accordion>
+							<NavLink
+								href={page.href}
+								label={page.label}
+								key={index}
+								className='!border-b !border-[rgba(255,255,255,0.1)]'
+							/>
 						);
-					}
-					return (
-						<NavLink
-							href={page.href}
-							label={page.label}
-							key={index}
-							className='!border-b !border-[rgba(255,255,255,0.1)]'
-						/>
-					);
-				})}
-			</AppShell.Navbar>
+					})}
+				</AppShell.Navbar>
+			)}
 
 			<AppShell.Main>{children}</AppShell.Main>
 		</AppShell>

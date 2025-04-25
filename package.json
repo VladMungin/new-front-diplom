@@ -33,6 +33,7 @@
 		"next": "15.3.1",
 		"nuqs": "^2.1.2",
 		"react": "^19.0.0",
+		"react-cookie": "^8.0.1",
 		"react-day-picker": "^9.3.0",
 		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.53.2",
