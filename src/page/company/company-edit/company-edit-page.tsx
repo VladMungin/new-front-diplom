@@ -158,7 +158,6 @@ export const CompanyEditPage = () => {
 							</Input.Wrapper>
 							<div className='grid grid-cols-2 gap-2'>
 								<Controller
-									key={field.id}
 									name={`roles.${index}.canEditEmployee`}
 									control={control}
 									render={({ field: { value, ...field } }) => {
@@ -172,7 +171,6 @@ export const CompanyEditPage = () => {
 									}}
 								/>
 								<Controller
-									key={field.id}
 									name={`roles.${index}.canEditProject`}
 									control={control}
 									render={({ field: { value, ...field } }) => {
@@ -186,7 +184,6 @@ export const CompanyEditPage = () => {
 									}}
 								/>
 								<Controller
-									key={field.id}
 									name={`roles.${index}.canEditRole`}
 									control={control}
 									render={({ field: { value, ...field } }) => {
@@ -200,7 +197,6 @@ export const CompanyEditPage = () => {
 									}}
 								/>
 								<Controller
-									key={field.id}
 									name={`roles.${index}.canEditSpecialization`}
 									control={control}
 									render={({ field: { value, ...field } }) => {
@@ -214,7 +210,6 @@ export const CompanyEditPage = () => {
 									}}
 								/>
 								<Controller
-									key={field.id}
 									name={`roles.${index}.canEditTask`}
 									control={control}
 									render={({ field: { value, ...field } }) => {
