@@ -1,6 +1,10 @@
 'use client';
 
-import { useCreateRole } from '@/entities/company';
+import {
+	useCreateRole,
+	useCreateSpecialization,
+	useCreateTypeOfTask,
+} from '@/entities/company';
 import { Specialization } from '@/entities/employee';
 import { Role, TypeOfTask } from '@/entities/task';
 import {
@@ -32,6 +36,8 @@ export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
 
 	const { mutateAsync: createRole } = useCreateRole();
+	const { mutateAsync: createSpecialization } = useCreateSpecialization();
+	const { mutateAsync: createTypeOfTask } = useCreateTypeOfTask();
 
 	const {
 		fields: roles,
@@ -73,7 +79,25 @@ export const CompanyEditPage = () => {
 			return response;
 		});
 
-		await Promise.all(requestRoles);
+		const requestSpecializations = data.specializations.map(
+			async specialization => {
+				const response = await createSpecialization(specialization);
+
+				return response;
+			}
+		);
+
+		const requestTypeOfTasks = data['type-of-tasks'].map(async typeOfTask => {
+			const response = await createTypeOfTask(typeOfTask);
+
+			return response;
+		});
+
+		await Promise.all([
+			...requestRoles,
+			...requestSpecializations,
+			...requestTypeOfTasks,
+		]);
 	};
 
 	return (
