@@ -1,5 +1,15 @@
 export const Pages = [
-	{ label: 'Проекты', href: '/projects' },
+	{
+		label: 'Проекты',
+		items: [
+			{
+				label: 'Мои проекты',
+				href: '/projects',
+			},
+			{ label: 'Все проекты', href: '/all-projects' },
+			{ label: 'Создать проект', href: '/project/create' },
+		],
+	},
 	{
 		label: 'Задачи',
 		items: [
@@ -17,5 +27,17 @@ export const Pages = [
 			},
 		],
 	},
-	{ label: 'Сотрудники', href: '/employees' },
+	{
+		label: 'Сотрудники',
+		items: [
+			{
+				label: 'Все сотрудники',
+				href: '/all-employees',
+			},
+			{
+				label: 'Добавить сотрудника',
+				href: '/employee/create',
+			},
+		],
+	},
 ];

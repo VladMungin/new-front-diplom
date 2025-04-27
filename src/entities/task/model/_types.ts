@@ -21,19 +21,19 @@ export interface Task {
 }
 
 export interface Role {
-	id: string;
+	id?: string;
 	name: string;
 	canEditEmployee: boolean;
 	canEditProject: boolean;
 	canEditTask: boolean;
 	canEditSpecialization: boolean;
 	canEditRole: boolean;
-	user: User[];
-	employee: Employee[];
+	user?: User[];
+	employee?: Employee[];
 }
 
-interface TypeOfTask {
-	id: string;
+export interface TypeOfTask {
+	id?: string;
 	name: string;
-	task: Task[];
+	task?: Task[];
 }

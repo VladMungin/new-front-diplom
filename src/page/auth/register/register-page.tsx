@@ -17,7 +17,7 @@ export const RegisterPage = () => {
 	};
 
 return (
-		<div className='w-full h-screen flex items-center justify-center '>
+		<div className='w-full h-screen flex items-center justify-center'>
 			<Card
 				className='mx-auto max-w-[860px] w-full mb-[150px]'
 				shadow='sm'

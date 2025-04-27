@@ -3,10 +3,10 @@ import { Role, Task } from '@/entities/task'
 import { Company, User } from '@/entities/user'
 
 export interface Specialization {
-  id: string;
+  id?: string;
   name: string;
-  tasks: Task[];
-  employees: Employee[];
+  tasks?: Task[];
+  employees?: Employee[];
 }
 
 export interface Employee {
