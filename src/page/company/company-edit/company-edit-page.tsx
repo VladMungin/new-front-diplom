@@ -1,5 +1,6 @@
 'use client';
 
+import { useCreateRole } from '@/entities/company';
 import { Specialization } from '@/entities/employee';
 import { Role, TypeOfTask } from '@/entities/task';
 import {
@@ -11,7 +12,13 @@ import {
 	Tooltip,
 } from '@mantine/core';
 import { useEffect } from 'react';
-import { Controller, Form, useFieldArray, useForm } from 'react-hook-form';
+import {
+	Controller,
+	Form,
+	FormSubmitHandler,
+	useFieldArray,
+	useForm,
+} from 'react-hook-form';
 import { CgTrash } from 'react-icons/cg';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
 
@@ -23,6 +30,8 @@ interface EditCompany {
 
 export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
+
+	const { mutateAsync: createRole } = useCreateRole();
 
 	const {
 		fields: roles,
@@ -57,8 +66,22 @@ export const CompanyEditPage = () => {
 		addTypeOfTask({} as TypeOfTask);
 	}, []);
 
+	const onSubmit: FormSubmitHandler<EditCompany> = async ({ data }) => {
+		const requestRoles = data.roles.map(async role => {
+			const response = await createRole(role);
+
+			return response;
+		});
+
+		await Promise.all(requestRoles);
+	};
+
 	return (
-		<Form control={control} className='w-full flex items-center justify-center'>
+		<Form
+			control={control}
+			className='w-full flex items-center justify-center'
+			onSubmit={onSubmit}
+		>
 			<Card
 				className='mx-auto max-w-[860px] w-full mb-[150px]'
 				shadow='sm'
@@ -287,6 +310,11 @@ export const CompanyEditPage = () => {
 				>
 					Добавить
 				</Button>
+				<CardSection className='!flex !flex-col !items-center '>
+					<Button fullWidth color='green' type='submit'>
+						Создать
+					</Button>
+				</CardSection>
 			</Card>
 		</Form>
 	);
