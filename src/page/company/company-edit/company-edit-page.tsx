@@ -23,6 +23,7 @@ import {
 	useFieldArray,
 	useForm,
 } from 'react-hook-form';
+import { AiOutlineLoading } from 'react-icons/ai';
 import { CgTrash } from 'react-icons/cg';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
 
@@ -35,9 +36,16 @@ interface EditCompany {
 export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
 
-	const { mutateAsync: createRole } = useCreateRole();
-	const { mutateAsync: createSpecialization } = useCreateSpecialization();
-	const { mutateAsync: createTypeOfTask } = useCreateTypeOfTask();
+	const { mutateAsync: createRole, isPending: isLoadingRole } = useCreateRole();
+	const {
+		mutateAsync: createSpecialization,
+		isPending: isLoadingSpecialization,
+	} = useCreateSpecialization();
+	const { mutateAsync: createTypeOfTask, isPending: isLoadingTypeOfTask } =
+		useCreateTypeOfTask();
+
+	const isLoading =
+		isLoadingRole || isLoadingSpecialization || isLoadingTypeOfTask;
 
 	const {
 		fields: roles,
@@ -336,7 +344,11 @@ export const CompanyEditPage = () => {
 				</Button>
 				<CardSection className='!flex !flex-col !items-center '>
 					<Button fullWidth color='green' type='submit'>
-						Создать
+						{isLoading ? (
+							<AiOutlineLoading className='animate-spin' />
+						) : (
+							'Создать'
+						)}
 					</Button>
 				</CardSection>
 			</Card>
