@@ -1,19 +1,20 @@
 'use client';
 
-import { Auth, useAuth } from '@/entities/user';
+import { Auth, useAuth, userStore } from '@/entities/user';
 import { Button, Card, CardSection, Input, PasswordInput } from '@mantine/core';
+import { useSetAtom } from 'jotai';
 import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
 export const LoginPage = () => {
 	const { control } = useForm<Auth>();
-
+	const setUser = useSetAtom(userStore);
 	const { loginData } = useAuth();
 
 	const onSubmit: FormSubmitHandler<Auth> = async data => {
 		const result = await loginData.mutateAsync(data.data);
-
-		console.log(result.user);
+		console.log(result)
+		setUser(result.user);
 	};
 
 	return (

@@ -228,6 +228,7 @@ export const CompanyEditPage = () => {
 				})}
 				<Button
 					fullWidth
+					color='indigo'
 					className='mb-2'
 					onClick={() => {
 						addRole({} as Role);
@@ -280,6 +281,7 @@ export const CompanyEditPage = () => {
 				<Button
 					fullWidth
 					className='mb-2'
+					color='indigo'
 					onClick={() => {
 						addSpecialization({} as Specialization);
 					}}
@@ -331,13 +333,14 @@ export const CompanyEditPage = () => {
 				<Button
 					fullWidth
 					className='mb-2'
+					color='indigo'
 					onClick={() => {
 						addTypeOfTask({} as Specialization);
 					}}
 				>
 					Добавить
 				</Button>
-				<CardSection className='!flex !flex-col !items-center '>
+				<CardSection className='!flex !flex-col !items-center mt-2'>
 					<Button fullWidth color='green' type='submit'>
 						{isLoading ? (
 							<AiOutlineLoading className='animate-spin' />

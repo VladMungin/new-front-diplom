@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
+import { useAuth } from '@/entities/user';
 import { Pages } from '@/shared/constants';
 import {
 	Accordion,
@@ -15,6 +16,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
+import { useCookies } from 'react-cookie';
 import { CgProfile } from 'react-icons/cg';
 
 interface NavbarProps {
@@ -22,19 +24,30 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ children }: NavbarProps) => {
+	const [cookies, setCookie] = useCookies(['access_token']);
+	const { isAuth, loginTokenData } = useAuth();
+
+	useEffect(() => {
+		if (isAuth) {
+			loginTokenData.mutate();
+		}
+	}, []);
 	const [opened, { toggle }] = useDisclosure();
 
 	// const { colorScheme, setColorScheme } = useMantineColorScheme();
 
 	const pathname = usePathname();
 
-	const offNavbar = !pathname.includes('/auth');
+	const offNavbar =
+		pathname.includes('/auth') || pathname.includes('company/edit');
+
+	console.log(offNavbar);
 
 	return (
 		<AppShell
 			header={{ height: 60 }}
 			navbar={{
-				width: offNavbar ? 300 : 0,
+				width: !offNavbar ? 300 : 0,
 				breakpoint: 'sm',
 				collapsed: { mobile: !opened },
 			}}
@@ -73,7 +86,7 @@ export const Navbar = ({ children }: NavbarProps) => {
 				</Link>
 			</AppShell.Header>
 
-			{offNavbar && (
+			{!offNavbar && (
 				<AppShell.Navbar p='md'>
 					{Pages.map((page, index) => {
 						if (page.items?.length) {

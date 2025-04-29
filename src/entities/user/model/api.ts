@@ -12,3 +12,12 @@ export const login = async (data: Auth, token: string): Promise<AuthRequest> =>
 			},
 		})
 	).data;
+
+export const loginToken = async (token: string): Promise<AuthRequest> =>
+	(
+		await baseApi.post('/auth/login/access_token', undefined, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+	).data;

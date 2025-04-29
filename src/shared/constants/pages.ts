@@ -1,4 +1,10 @@
-export const Pages = [
+export interface PagesI {
+	label: string;
+	href?: string;
+	items?: PagesI[];
+}
+
+export const Pages: PagesI[] = [
 	{
 		label: 'Проекты',
 		items: [

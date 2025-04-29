@@ -3,7 +3,7 @@ import { useSetAtom } from 'jotai';
 import { useCookies } from 'react-cookie';
 import { userStore } from './_store';
 import { Auth } from './_types';
-import { login, register } from './api';
+import { login, loginToken, register } from './api';
 
 export const useAuth = () => {
 	const [cookies, setCookie] = useCookies(['access_token']);
@@ -19,6 +19,7 @@ export const useAuth = () => {
 			setCookie('access_token', data.accessToken, {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
+			console.log(data.user);
 			setUser(data.user);
 		},
 	});
@@ -35,9 +36,22 @@ export const useAuth = () => {
 		},
 	});
 
+	const loginTokenData = useMutation({
+		mutationFn: () => {
+			return loginToken(cookies.access_token);
+		},
+		onSuccess: data => {
+			setCookie('access_token', data.accessToken, {
+				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
+			});
+			setUser(data.user);
+		},
+	});
+
 	return {
 		isAuth,
 		registerData,
 		loginData,
+		loginTokenData,
 	};
 };
