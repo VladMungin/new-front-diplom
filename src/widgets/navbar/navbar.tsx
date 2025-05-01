@@ -41,8 +41,6 @@ export const Navbar = ({ children }: NavbarProps) => {
 	const offNavbar =
 		pathname.includes('/auth') || pathname.includes('company/edit');
 
-	console.log(offNavbar);
-
 	return (
 		<AppShell
 			header={{ height: 60 }}

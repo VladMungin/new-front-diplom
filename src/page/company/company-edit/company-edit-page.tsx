@@ -15,6 +15,7 @@ import {
 	Input,
 	Tooltip,
 } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import {
 	Controller,
@@ -35,7 +36,7 @@ interface EditCompany {
 
 export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
-
+	const { push } = useRouter();
 	const { mutateAsync: createRole, isPending: isLoadingRole } = useCreateRole();
 	const {
 		mutateAsync: createSpecialization,
@@ -106,6 +107,8 @@ export const CompanyEditPage = () => {
 			...requestSpecializations,
 			...requestTypeOfTasks,
 		]);
+
+		push('/project/create');
 	};
 
 	return (

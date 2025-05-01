@@ -41,7 +41,7 @@ export const ProjectCreate = () => {
 			})
 			.filter(item => item !== undefined);
 
-		console.log(employeeIds);
+		console.log(employeeIds)
 
 		await createProject({
 			...data,

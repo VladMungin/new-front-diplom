@@ -12,11 +12,9 @@ export const RegisterPage = () => {
 
 	const onSubmit: FormSubmitHandler<Auth> = async data => {
 		const result = await registerData.mutateAsync(data.data);
-
-		console.log(result.user);
 	};
 
-return (
+	return (
 		<div className='w-full h-screen flex items-center justify-center'>
 			<Card
 				className='mx-auto max-w-[860px] w-full mb-[150px]'
