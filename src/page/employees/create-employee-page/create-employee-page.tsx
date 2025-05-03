@@ -1,6 +1,7 @@
 'use client';
+import { useGetRoles } from '@/entities/company';
 import { Employee } from '@/entities/employee';
-import { Button, Card, CardSection, Input } from '@mantine/core';
+import { Button, Card, CardSection, Input, Select } from '@mantine/core';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
@@ -10,7 +11,10 @@ type CreateEmployee = Omit<
 >;
 
 export const CreateEmployeePage = () => {
+	const { data: roles } = useGetRoles();
 	const { control } = useForm<CreateEmployee>();
+
+	const rolesForMultiSelect = roles?.map(role => role.name);
 
 	return (
 		<Form control={control} className='w-full flex items-center justify-center'>
@@ -52,15 +56,17 @@ export const CreateEmployeePage = () => {
 						}}
 					/>
 				</Input.Wrapper>
-				<Input.Wrapper label='Роль'>
-					<Controller
-						control={control}
-						name='role.name'
-						render={({ field }) => {
-							return <Input {...field} />;
-						}}
-					/>
-				</Input.Wrapper>
+
+				<Controller
+					control={control}
+					name='role.name'
+					render={({ field }) => {
+						return (
+							<Select data={rolesForMultiSelect} {...field} label='Роль' />
+						);
+					}}
+				/>
+
 				<Input.Wrapper label='Специальность'>
 					<Controller
 						control={control}
@@ -72,11 +78,7 @@ export const CreateEmployeePage = () => {
 				</Input.Wrapper>
 				<CardSection className='!flex !flex-col !items-center mt-2'>
 					<Button fullWidth color='green' type='submit'>
-						{isLoading ? (
-							<AiOutlineLoading className='animate-spin' />
-						) : (
-							'Создать'
-						)}
+						{false ? <AiOutlineLoading className='animate-spin' /> : 'Создать'}
 					</Button>
 				</CardSection>
 			</Card>
