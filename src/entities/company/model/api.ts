@@ -6,13 +6,19 @@ import { targetRole, targetSpecialization, targetTypeOfTask } from './_consts';
 export const createRole = async (data: Role): Promise<Role> =>
 	(await baseApi.post(targetRole, data)).data;
 
-export const getRoles = async (): Promise<Role[]> =>
-	(await baseApi(targetRole)).data;
+export const getRoles = async (userId: string): Promise<Role[]> =>
+	(await baseApi(`${targetRole}/${userId}`)).data;
 
 export const createSpecialization = async (
 	data: Specialization
 ): Promise<Specialization> =>
 	(await baseApi.post(targetSpecialization, data)).data;
 
+export const getSpecialization = async (userId: string): Promise<Role[]> =>
+	(await baseApi(`${targetSpecialization}/${userId}`)).data;
+
 export const createTypeOfTask = async (data: TypeOfTask): Promise<TypeOfTask> =>
 	(await baseApi.post(targetTypeOfTask, data)).data;
+
+export const getTypeOfTask = async (userId: string): Promise<Role[]> =>
+	(await baseApi(`${targetTypeOfTask}/${userId}`)).data;

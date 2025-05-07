@@ -7,8 +7,8 @@ import { WithMantine } from './_with-mantine';
 import { WithTanstackQuery } from './_with-tanstack-query';
 
 export const WithProviders = composeProviders(
-	WithMantine,
-	WithTanstackQuery,
 	WithJotai,
-	WithCookies
+	WithTanstackQuery,
+	WithCookies,
+	WithMantine
 );

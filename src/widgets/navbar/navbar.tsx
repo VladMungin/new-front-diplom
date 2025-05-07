@@ -12,11 +12,9 @@ import {
 	AccordionPanel,
 	AppShell,
 	Burger,
-	NavLink,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { usePathname } from 'next/navigation';
-import { useCookies } from 'react-cookie';
 import { CgProfile } from 'react-icons/cg';
 
 interface NavbarProps {
@@ -24,7 +22,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ children }: NavbarProps) => {
-	const [cookies, setCookie] = useCookies(['access_token']);
+	// const [cookies, setCookie] = useCookies(['access_token']);
 	const { isAuth, loginTokenData } = useAuth();
 
 	useEffect(() => {
@@ -94,14 +92,19 @@ export const Navbar = ({ children }: NavbarProps) => {
 										<AccordionControl>
 											<h2>{page.label}</h2>
 										</AccordionControl>
-										<AccordionPanel>
+										<AccordionPanel
+											classNames={{
+												content: 'flex flex-col gap-2',
+											}}
+										>
 											{page.items.map(item => {
 												return (
-													<NavLink
-														label={item.label}
-														href={item.href}
+													<Link
+														href={item.href as string}
 														key={`${index}-${item.label}`}
-													/>
+													>
+														{item.label}
+													</Link>
 												);
 											})}
 										</AccordionPanel>
@@ -110,12 +113,13 @@ export const Navbar = ({ children }: NavbarProps) => {
 							);
 						}
 						return (
-							<NavLink
-								href={page.href}
-								label={page.label}
+							<Link
+								href={page.href as string}
 								key={index}
 								className='!border-b !border-[rgba(255,255,255,0.1)]'
-							/>
+							>
+								{page.label}
+							</Link>
 						);
 					})}
 				</AppShell.Navbar>

@@ -36,6 +36,7 @@ export const useAuth = () => {
 			});
 
 			setUser(data.user);
+			router.push('/company/edit');
 		},
 	});
 

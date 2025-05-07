@@ -1,7 +1,9 @@
 'use client';
 import { useGetRoles } from '@/entities/company';
 import { Employee } from '@/entities/employee';
+import { userStore } from '@/entities/user';
 import { Button, Card, CardSection, Input, Select } from '@mantine/core';
+import { useAtomValue } from 'jotai';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
@@ -11,7 +13,9 @@ type CreateEmployee = Omit<
 >;
 
 export const CreateEmployeePage = () => {
-	const { data: roles } = useGetRoles();
+	const user = useAtomValue(userStore);
+	console.log(user);
+	const { data: roles } = useGetRoles(user?.id);
 	const { control } = useForm<CreateEmployee>();
 
 	const rolesForMultiSelect = roles?.map(role => role.name);

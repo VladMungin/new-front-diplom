@@ -7,6 +7,7 @@ import {
 } from '@/entities/company';
 import { Specialization } from '@/entities/employee';
 import { Role, TypeOfTask } from '@/entities/task';
+import { userStore } from '@/entities/user';
 import {
 	Button,
 	Card,
@@ -15,6 +16,7 @@ import {
 	Input,
 	Tooltip,
 } from '@mantine/core';
+import { useAtomValue } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import {
@@ -36,6 +38,8 @@ interface EditCompany {
 
 export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
+	const user = useAtomValue(userStore);
+	console.log(user);
 	const { push } = useRouter();
 	const { mutateAsync: createRole, isPending: isLoadingRole } = useCreateRole();
 	const {
@@ -83,21 +87,27 @@ export const CompanyEditPage = () => {
 
 	const onSubmit: FormSubmitHandler<EditCompany> = async ({ data }) => {
 		const requestRoles = data.roles.map(async role => {
-			const response = await createRole(role);
+			const response = await createRole({ ...role, userId: user?.id });
 
 			return response;
 		});
 
 		const requestSpecializations = data.specializations.map(
 			async specialization => {
-				const response = await createSpecialization(specialization);
+				const response = await createSpecialization({
+					...specialization,
+					userId: user?.id,
+				});
 
 				return response;
 			}
 		);
 
 		const requestTypeOfTasks = data['type-of-tasks'].map(async typeOfTask => {
-			const response = await createTypeOfTask(typeOfTask);
+			const response = await createTypeOfTask({
+				...typeOfTask,
+				userId: user?.id,
+			});
 
 			return response;
 		});
