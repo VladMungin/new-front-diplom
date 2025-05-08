@@ -6,8 +6,10 @@ import { useAtomValue } from 'jotai';
 
 export const AllEmployeesProjects = () => {
 	const user = useAtomValue(userStore);
-	const {} = useGetEmployees(user?.id as string, {
+	const { data: employees } = useGetEmployees(user?.id as string, {
 		enabled: !!user?.id,
 	});
+
+	console.log(employees);
 	return <div></div>;
 };
