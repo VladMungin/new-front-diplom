@@ -25,9 +25,11 @@ export const ProjectCreate = () => {
 
 	const { control } = useForm<CreateProject>();
 
-	const { data: employees } = useGetEmployees();
+	const { data: employees } = useGetEmployees(user?.id || '');
 
 	const { mutateAsync: createProject, isPending } = useCreateProject();
+
+	console.log(employees);
 
 	const employeesForMultiSelect = employees?.map(employee => employee.fullName);
 
@@ -40,8 +42,6 @@ export const ProjectCreate = () => {
 				return undefined;
 			})
 			.filter(item => item !== undefined);
-
-		console.log(employeeIds)
 
 		await createProject({
 			...data,

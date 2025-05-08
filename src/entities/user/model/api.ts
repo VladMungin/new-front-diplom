@@ -1,4 +1,5 @@
 import { baseApi } from '@/shared/api';
+import { AxiosResponse } from 'axios';
 import { Auth, AuthRequest } from './_types';
 
 export const register = async (data: Auth): Promise<AuthRequest> =>
@@ -20,11 +21,9 @@ export const login = async (data: Auth, token: string): Promise<AuthRequest> =>
 		})
 	).data;
 
-export const loginToken = async (): Promise<AuthRequest> =>
-	(
-		await baseApi.post('/auth/login/access_token', undefined, {
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-	).data;
+export const loginToken = async (): Promise<AxiosResponse<AuthRequest>> =>
+	await baseApi.post('/auth/login/access_token', undefined, {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});

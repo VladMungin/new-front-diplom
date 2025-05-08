@@ -39,7 +39,6 @@ interface EditCompany {
 export const CompanyEditPage = () => {
 	const { control } = useForm<EditCompany>();
 	const user = useAtomValue(userStore);
-	console.log(user);
 	const { push } = useRouter();
 	const { mutateAsync: createRole, isPending: isLoadingRole } = useCreateRole();
 	const {

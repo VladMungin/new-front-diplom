@@ -4,3 +4,4 @@ export * from './use-create-role';
 export * from './use-create-specialization';
 export * from './use-create-type-of-task';
 export * from './use-get-roles';
+export * from './use-get-specialization';

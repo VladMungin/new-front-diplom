@@ -1,9 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 
-import { useAuth } from '@/entities/user';
+import { useAuth, userStore } from '@/entities/user';
 import { Pages } from '@/shared/constants';
 import {
 	Accordion,
@@ -14,7 +14,8 @@ import {
 	Burger,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { usePathname } from 'next/navigation';
+import { useAtomValue } from 'jotai';
+import { usePathname, useRouter } from 'next/navigation';
 import { CgProfile } from 'react-icons/cg';
 
 interface NavbarProps {
@@ -23,11 +24,17 @@ interface NavbarProps {
 
 export const Navbar = ({ children }: NavbarProps) => {
 	// const [cookies, setCookie] = useCookies(['access_token']);
-	const { isAuth, loginTokenData } = useAuth();
-
+	const { loginTokenData } = useAuth();
+	const router = useRouter();
+	const firstRender = useRef(true);
+	const user = useAtomValue(userStore);
 	useEffect(() => {
-		if (isAuth) {
+		if (firstRender || !user) {
 			loginTokenData.mutate();
+			if (loginTokenData.isError) {
+				router.push('/auth/login');
+			}
+			firstRender.current = false;
 		}
 	}, []);
 	const [opened, { toggle }] = useDisclosure();

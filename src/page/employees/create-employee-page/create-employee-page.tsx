@@ -1,29 +1,64 @@
 'use client';
-import { useGetRoles } from '@/entities/company';
-import { Employee } from '@/entities/employee';
+import { useGetRoles, useGetSpecialization } from '@/entities/company';
+import { useCreateEmployee } from '@/entities/employee';
 import { userStore } from '@/entities/user';
 import { Button, Card, CardSection, Input, Select } from '@mantine/core';
 import { useAtomValue } from 'jotai';
-import { Controller, Form, useForm } from 'react-hook-form';
+import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
 
-type CreateEmployee = Omit<
-	Employee,
-	'id' | 'user' | 'userId' | 'roleId' | 'tasks' | 'specializationId' | 'company'
->;
+export type CreateEmployee = {
+	fullName: string;
+	email: string;
+	phone: string;
+	password: string;
+	companyId?: string;
+	specialization?: string;
+	userId?: string;
+	role?: string;
+	roleId?: string;
+};
 
 export const CreateEmployeePage = () => {
 	const user = useAtomValue(userStore);
-	console.log(user);
-	const { data: roles } = useGetRoles(user?.id);
+	const { data: roles } = useGetRoles(user?.id || '');
+	const { data: specializations } = useGetSpecialization(user?.id || '');
+
+	const { mutateAsync } = useCreateEmployee();
 	const { control } = useForm<CreateEmployee>();
 
 	const rolesForMultiSelect = roles?.map(role => role.name);
 
+	const specializationsForMultiSelect = specializations?.map(
+		specialization => specialization.name
+	);
+
+	const onSubmit: FormSubmitHandler<CreateEmployee> = async ({ data }) => {
+		const roleId = roles
+			?.map(role => {
+				if (role.name === data.role) {
+					return role.id;
+				}
+				return undefined;
+			})
+			.filter(item => item !== undefined)[0];
+		const res = await mutateAsync({
+			...data,
+			userId: user?.id,
+			companyId: user?.companyId,
+			roleId: roleId,
+		});
+		console.log(res);
+	};
+
 	return (
-		<Form control={control} className='w-full flex items-center justify-center'>
+		<Form
+			control={control}
+			className='w-full flex items-center justify-center'
+			onSubmit={onSubmit}
+		>
 			<Card
-				className='mx-auto max-w-[860px] w-full mb-[150px]'
+				className='mx-auto max-w-[860px] w-full mb-[150px] !gap-5'
 				shadow='sm'
 				radius='md'
 				withBorder
@@ -33,6 +68,15 @@ export const CreateEmployeePage = () => {
 						Добавление сотрудника
 					</h2>
 				</CardSection>
+				{/* <Input.Wrapper label='Имя' className='!hidden'>
+					<Controller
+						control={control}
+						name='userId'
+						render={({ field }) => {
+							return <Input {...field} value={user?.id} />;
+						}}
+					/>
+				</Input.Wrapper> */}
 				<Input.Wrapper label='Имя'>
 					<Controller
 						control={control}
@@ -60,10 +104,19 @@ export const CreateEmployeePage = () => {
 						}}
 					/>
 				</Input.Wrapper>
+				<Input.Wrapper label='Пароль'>
+					<Controller
+						control={control}
+						name='password'
+						render={({ field }) => {
+							return <Input {...field} />;
+						}}
+					/>
+				</Input.Wrapper>
 
 				<Controller
 					control={control}
-					name='role.name'
+					name='role'
 					render={({ field }) => {
 						return (
 							<Select data={rolesForMultiSelect} {...field} label='Роль' />
@@ -71,16 +124,20 @@ export const CreateEmployeePage = () => {
 					}}
 				/>
 
-				<Input.Wrapper label='Специальность'>
-					<Controller
-						control={control}
-						name='specialization.name'
-						render={({ field }) => {
-							return <Input {...field} />;
-						}}
-					/>
-				</Input.Wrapper>
-				<CardSection className='!flex !flex-col !items-center mt-2'>
+				<Controller
+					control={control}
+					name='specialization'
+					render={({ field }) => {
+						return (
+							<Select
+								data={specializationsForMultiSelect}
+								{...field}
+								label='Специализация'
+							/>
+						);
+					}}
+				/>
+				<CardSection className='!flex !flex-col !items-center '>
 					<Button fullWidth color='green' type='submit'>
 						{false ? <AiOutlineLoading className='animate-spin' /> : 'Создать'}
 					</Button>

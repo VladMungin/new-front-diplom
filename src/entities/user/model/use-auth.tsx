@@ -45,10 +45,10 @@ export const useAuth = () => {
 			return loginToken();
 		},
 		onSuccess: data => {
-			setCookie('access_token', data.accessToken, {
+			setCookie('access_token', data.data.accessToken, {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
-			setUser(data.user);
+			setUser(data.data.user);
 		},
 	});
 

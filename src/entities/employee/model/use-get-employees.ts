@@ -1,16 +1,15 @@
-import { userStore } from '@/entities/user';
 import { UseMutationOptions, useQuery } from '@tanstack/react-query';
-import { useAtomValue } from 'jotai';
 import { keyEmployeesGet } from './_constants';
 import { Employee } from './_types';
 import { getEmployees } from './api';
 
 export const useGetEmployees = (
+	userId: string,
 	config?: UseMutationOptions<Employee, Error, Employee, unknown>
 ) => {
-	const user = useAtomValue(userStore);
+	// const user = useAtomValue(userStore);
 	return useQuery({
-		queryFn: () => getEmployees(user!.id),
+		queryFn: () => getEmployees(userId),
 		queryKey: keyEmployeesGet,
 		...config,
 		// initialData: [
