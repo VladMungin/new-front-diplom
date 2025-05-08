@@ -12,7 +12,7 @@ export const Pages: PagesI[] = [
 				label: 'Мои проекты',
 				href: '/projects',
 			},
-			{ label: 'Все проекты', href: '/all-projects' },
+			{ label: 'Все проекты', href: '/project/all-projects' },
 			{ label: 'Создать проект', href: '/project/create' },
 		],
 	},
@@ -38,7 +38,7 @@ export const Pages: PagesI[] = [
 		items: [
 			{
 				label: 'Все сотрудники',
-				href: '/all-employees',
+				href: '/employee/all-employees',
 			},
 			{
 				label: 'Добавить сотрудника',

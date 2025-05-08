@@ -5,3 +5,7 @@ import { Project, ProjectRequest } from './_types';
 export const createProject = async (data: ProjectRequest): Promise<Project> => {
 	return (await baseApi.post(targetProject, data)).data;
 };
+
+export const getProjects = async (userId: string): Promise<Project[]> => {
+	return (await baseApi(`${targetProject}/${userId}`)).data;
+};
