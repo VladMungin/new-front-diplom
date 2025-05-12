@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import 'mantine-react-table/styles.css';
 import './index.css';
 
 import type { Metadata } from 'next';
