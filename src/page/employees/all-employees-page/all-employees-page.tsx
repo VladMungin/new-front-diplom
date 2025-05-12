@@ -101,6 +101,7 @@ export const AllEmployeesProjects = () => {
 				);
 
 				setValidationErrors({
+					...validationErrors,
 					[Object.keys(values)[0]]: errors[Object.keys(values)[0]],
 				});
 			}
