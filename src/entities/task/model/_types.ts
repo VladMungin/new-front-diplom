@@ -3,21 +3,21 @@ import { Project } from '@/entities/project'
 import { User } from '@/entities/user'
 
 export interface Task {
-	id: number;
-	status: string;
+	id?: number;
+	status?: string;
 	title: string;
 	description: string;
 	employeeId: string;
 	projectId: string;
 	createdAt: Date;
 	timeToCompleat: number;
-	currentTime: number;
+	currentTime?: number;
 	typeOfTaskId: string;
 	specializationId: string;
-	employee: Employee;
-	project: Project;
-	specialization: Specialization;
-	type: TypeOfTask;
+	employee?: Employee;
+	project?: Project;
+	specialization?: Specialization;
+	type?: TypeOfTask;
 }
 
 export interface Role {

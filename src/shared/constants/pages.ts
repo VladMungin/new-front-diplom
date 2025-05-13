@@ -29,7 +29,7 @@ export const Pages: PagesI[] = [
 			},
 			{
 				label: 'Создать задачу',
-				href: '/task/create',
+				href: '/tasks/create',
 			},
 		],
 	},

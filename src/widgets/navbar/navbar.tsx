@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ReactNode, useEffect, useRef } from 'react';
 
 import { useAuth, userStore } from '@/entities/user';
+import { baseApi } from '@/shared/api';
 import { Pages } from '@/shared/constants';
 import {
 	Accordion,
@@ -21,6 +22,8 @@ import { CgProfile } from 'react-icons/cg';
 interface NavbarProps {
 	children: ReactNode;
 }
+
+const backup = () => baseApi.post('/backup');
 
 export const Navbar = ({ children }: NavbarProps) => {
 	// const [cookies, setCookie] = useCookies(['access_token']);
@@ -129,6 +132,14 @@ export const Navbar = ({ children }: NavbarProps) => {
 							</Link>
 						);
 					})}
+					<button
+						className='mt-auto bg-emerald-700'
+						onClick={async () => {
+							await backup();
+						}}
+					>
+						backup
+					</button>
 				</AppShell.Navbar>
 			)}
 

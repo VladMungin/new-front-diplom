@@ -29,8 +29,6 @@ export const ProjectCreate = () => {
 
 	const { mutateAsync: createProject, isPending } = useCreateProject();
 
-	console.log(employees);
-
 	const employeesForMultiSelect = employees?.map(employee => employee.fullName);
 
 	const onSubmit: FormSubmitHandler<CreateProject> = async ({ data }) => {
