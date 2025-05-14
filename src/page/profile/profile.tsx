@@ -1,22 +1,32 @@
 'use client';
 
+import { EditRolesModal } from '@/entities/profile/ui/edit-roles-modal/edit-roles-modal';
+import { userStore } from '@/entities/user';
 import {
 	Button,
 	Card,
 	CardSection,
 	Input,
 	Modal,
+	PasswordInput,
 	Switch,
 	Title,
 	useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useAtomValue } from 'jotai';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { IoIosSettings } from 'react-icons/io';
 
 export const ProfilePage = () => {
 	const [opened, { open, close }] = useDisclosure(false);
-	const { control } = useForm();
+
+	const user = useAtomValue(userStore);
+
+	const {
+		control,
+		formState: { isDirty },
+	} = useForm();
 
 	const { colorScheme, setColorScheme } = useMantineColorScheme();
 
@@ -25,13 +35,16 @@ export const ProfilePage = () => {
 			<Card>
 				<CardSection
 					withBorder
-					className='!flex items-center justify-between !py-1 !mx-5'
+					className='!flex items-center justify-between !py-1 !px-5'
 				>
 					<h2 className='text-2xl font-bold my-3 gap-2'>Моя учетная запись</h2>
 					<Button unstyled onClick={open} className='!cursor-pointer'>
 						<IoIosSettings size={40} />
 					</Button>
 				</CardSection>
+				<div className=''>
+					<EditRolesModal />
+				</div>
 			</Card>
 			<Modal
 				opened={opened}
@@ -48,13 +61,13 @@ export const ProfilePage = () => {
 								Информация
 							</Title>
 						</CardSection>
-						<Form control={control}>
+						<Form control={control} className='flex flex-col gap-2'>
 							<Input.Wrapper label='Имя'>
 								<Controller
 									control={control}
-									name='fullName'
+									name='name'
 									render={({ field }) => {
-										return <Input {...field} />;
+										return <Input {...field} defaultValue={user?.name} />;
 									}}
 								/>
 							</Input.Wrapper>
@@ -63,28 +76,21 @@ export const ProfilePage = () => {
 									control={control}
 									name='email'
 									render={({ field }) => {
-										return <Input {...field} />;
+										return <Input {...field} defaultValue={user?.email} />;
 									}}
 								/>
 							</Input.Wrapper>
-							<Input.Wrapper label='Телефон'>
-								<Controller
-									control={control}
-									name='phone'
-									render={({ field }) => {
-										return <Input {...field} />;
-									}}
-								/>
-							</Input.Wrapper>
+
 							<Input.Wrapper label='Пароль'>
 								<Controller
 									control={control}
 									name='password'
 									render={({ field }) => {
-										return <Input {...field} />;
+										return <PasswordInput {...field} />;
 									}}
 								/>
 							</Input.Wrapper>
+							{isDirty && <Button className='!ml-auto'>Сохранить</Button>}
 						</Form>
 					</Card>
 					<Card className='w-full'>
