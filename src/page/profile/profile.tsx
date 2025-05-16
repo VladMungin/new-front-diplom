@@ -1,6 +1,6 @@
 'use client';
 
-import { EditRolesModal } from '@/entities/profile/ui/edit-roles-modal/edit-roles-modal';
+import { EditRolesModal, EditTypeOfTaskModal } from '@/entities/profile';
 import { userStore } from '@/entities/user';
 import {
 	Button,
@@ -42,8 +42,9 @@ export const ProfilePage = () => {
 						<IoIosSettings size={40} />
 					</Button>
 				</CardSection>
-				<div className=''>
+				<div className='flex gap-5'>
 					<EditRolesModal />
+					<EditTypeOfTaskModal />
 				</div>
 			</Card>
 			<Modal

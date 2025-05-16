@@ -13,7 +13,7 @@ export const getRoles = async (userId: string | undefined): Promise<Role[]> =>
 export const updateRoles = async (data: Role): Promise<Role> =>
 	(
 		await baseApi.patch(`${targetRole}/${data.id}`, {
-			data,
+			...data,
 		})
 	).data;
 // specializations
@@ -29,5 +29,12 @@ export const getSpecialization = async (userId: string): Promise<Role[]> =>
 export const createTypeOfTask = async (data: TypeOfTask): Promise<TypeOfTask> =>
 	(await baseApi.post(targetTypeOfTask, data)).data;
 
-export const getTypeOfTask = async (userId: string): Promise<Role[]> =>
+export const getTypeOfTask = async (userId: string | undefined): Promise<Role[]> =>
 	(await baseApi(`${targetTypeOfTask}/${userId}`)).data;
+
+export const updateTypeOfTask = async (data: TypeOfTask): Promise<TypeOfTask> =>
+	(
+		await baseApi.patch(`${targetTypeOfTask}/${data.id}`, {
+			...data,
+		})
+	).data;

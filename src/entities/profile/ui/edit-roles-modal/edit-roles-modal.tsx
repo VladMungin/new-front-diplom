@@ -48,7 +48,7 @@ export const EditRolesModal = () => {
 
 	return (
 		<>
-			<Button onClick={open}>Настройка ролей</Button>
+			<Button onClick={open} mt={10}>Настройка ролей</Button>
 			<Modal
 				opened={opened}
 				onClose={close}

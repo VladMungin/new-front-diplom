@@ -5,4 +5,6 @@ export * from './use-create-specialization';
 export * from './use-create-type-of-task';
 export * from './use-get-roles';
 export * from './use-get-specialization';
+export * from './use-get-type-of-task';
 export * from './use-update-role';
+export * from './use-update-type-of-task'
