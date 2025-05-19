@@ -10,14 +10,27 @@ import {
 	Input,
 	Modal,
 	PasswordInput,
+	SegmentedControl,
 	Switch,
 	Title,
 	useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAtomValue } from 'jotai';
+import { useState } from 'react';
 import { Controller, Form, useForm } from 'react-hook-form';
 import { IoIosSettings } from 'react-icons/io';
+
+const renderSwitch = (tab: string) => {
+	switch (tab) {
+		case 'Настройка ролей':
+			return <EditRolesModal />;
+		case 'Настройка типов задач':
+			return <EditTypeOfTaskModal />;
+		case 'Настройка специальностей':
+			return <EditSpecializationModal />;
+	}
+};
 
 export const ProfilePage = () => {
 	const [opened, { open, close }] = useDisclosure(false);
@@ -31,6 +44,8 @@ export const ProfilePage = () => {
 
 	const { colorScheme, setColorScheme } = useMantineColorScheme();
 
+	const [tab, setTab] = useState('Настройка ролей');
+
 	return (
 		<>
 			<Card>
@@ -43,11 +58,18 @@ export const ProfilePage = () => {
 						<IoIosSettings size={40} />
 					</Button>
 				</CardSection>
-				<div className='flex gap-5'>
-					<EditRolesModal />
-					<EditTypeOfTaskModal />
-					<EditSpecializationModal />
-				</div>
+
+				<SegmentedControl
+					className='mt-4'
+					value={tab}
+					onChange={setTab}
+					data={[
+						'Настройка ролей',
+						'Настройка типов задач',
+						'Настройка специальностей',
+					]}
+				/>
+				{renderSwitch(tab)}
 			</Card>
 			<Modal
 				opened={opened}
@@ -112,6 +134,8 @@ export const ProfilePage = () => {
 									setColorScheme('dark');
 								}
 							}}
+							onLabel='ON'
+							offLabel='OFF'
 						/>
 					</Card>
 				</div>
