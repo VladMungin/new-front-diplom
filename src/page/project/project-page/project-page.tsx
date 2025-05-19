@@ -10,7 +10,9 @@ import {
 	useGetProjectById,
 	useUpdateProject,
 } from '@/entities/project';
+import { groupTaskByType } from '@/entities/task';
 import { userStore } from '@/entities/user';
+import { chooseWordByNumber } from '@/shared/helpers';
 import {
 	Box,
 	Button,
@@ -58,7 +60,13 @@ export const ProjectPage = () => {
 
 	const groupedEmployees = useMemo(() => {
 		if (project?.employees.length) {
-			return groupEmployeesBySpecialization(project?.employees as Employee[]);
+			return groupEmployeesBySpecialization(project.employees as Employee[]);
+		} else return null;
+	}, [project]);
+
+	const groupedTask = useMemo(() => {
+		if (project?.tasks.length) {
+			return groupTaskByType(project.tasks);
 		} else return null;
 	}, [project]);
 
@@ -196,7 +204,31 @@ export const ProjectPage = () => {
 						<CardSection withBorder className='!px-4 py-2'>
 							<Title order={3}>Задачи</Title>
 						</CardSection>
-						<div className='my-5'>Тут будут задачи</div>
+						<div className='my-5'>
+							{groupedTask ? (
+								<List listStyleType='disc'>
+									{Object.entries(groupedTask || {}).map(([type, tasks]) => (
+										<ListItem
+											key={type}
+											classNames={{
+												itemLabel: '!flex',
+											}}
+										>
+											<Title order={6}>
+												{type}: {tasks.length}{' '}
+												{chooseWordByNumber(tasks.length, [
+													'задача',
+													'задачи',
+													'задач',
+												])}
+											</Title>
+										</ListItem>
+									))}
+								</List>
+							) : (
+								<p>Участников на проекте еще нет</p>
+							)}
+						</div>
 						<CardSection withBorder className='!px-4 py-2 mt-auto'>
 							<ButtonGroup className='gap-2'>
 								<Link

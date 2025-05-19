@@ -1,14 +1,20 @@
 'use client';
 
-import { useGetSpecialization } from '@/entities/company';
+import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
+import { useGetEmployees } from '@/entities/employee';
 import { Task, useCreateTask } from '@/entities/task';
 import { userStore } from '@/entities/user';
-import { Card, Input, Select, Textarea } from '@mantine/core';
+import { timeToMilliseconds } from '@/shared/lib';
+import { Button, Card, Input, Select, Textarea } from '@mantine/core';
+import { TimePicker } from '@mantine/dates';
 import { useAtomValue } from 'jotai';
-import { Controller, Form, useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
+import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
 export const CreateTask = () => {
 	const user = useAtomValue(userStore);
+
+	const searchParams = useSearchParams();
 
 	const { mutateAsync: createTask } = useCreateTask();
 
@@ -16,11 +22,42 @@ export const CreateTask = () => {
 		enabled: !!user?.id,
 	});
 
+	const { data: typeOfTasks } = useGetTypeOfTasks(user?.id as string, {
+		enabled: !!user?.id,
+	});
+
+	const { data: employees } = useGetEmployees(user?.id as string, {
+		enabled: !!user?.id,
+	});
+
 	const specializationsForMultiSelect = specializations?.map(
-		specialization => specialization.name
+		specialization => ({
+			label: specialization.name,
+			value: specialization.id as string,
+		})
 	);
 
-	const { control } = useForm<Task>();
+	const typeOfTaskForMultiSelect = typeOfTasks?.map(typeOfTask => ({
+		label: typeOfTask.name,
+		value: typeOfTask.id as string,
+	}));
+
+	const employeesForMultiSelect = employees?.map(employee => ({
+		label: employee.fullName,
+		value: employee.id,
+	}));
+
+	const { control, handleSubmit } = useForm<Task>();
+
+	const onSubmit: SubmitHandler<Task> = async data => {
+		console.log(data);
+		await createTask({
+			...data,
+			currentTime: 0,
+			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
+			projectId: searchParams.get('projectId') as string,
+		});
+	};
 
 	return (
 		<Form control={control} className='w-full flex items-center justify-center'>
@@ -50,7 +87,7 @@ export const CreateTask = () => {
 					/>
 					<Controller
 						control={control}
-						name='specialization.name'
+						name='specializationId'
 						render={({ field }) => {
 							return (
 								<Select
@@ -61,7 +98,56 @@ export const CreateTask = () => {
 							);
 						}}
 					/>
+					<Controller
+						control={control}
+						name='typeOfTaskId'
+						render={({ field }) => {
+							return (
+								<Select
+									data={typeOfTaskForMultiSelect}
+									{...field}
+									label='Тип задачи *'
+								/>
+							);
+						}}
+					/>
+					<Controller
+						control={control}
+						name='timeToCompleat'
+						render={({ field }) => {
+							return (
+								<TimePicker
+									label='Время на выполнение задачи'
+									withDropdown
+									{...field}
+									value={String(field.value || '')}
+								/>
+							);
+						}}
+					/>
+
+					<Controller
+						control={control}
+						name='employeeId'
+						render={({ field }) => {
+							return (
+								<Select
+									data={employeesForMultiSelect}
+									{...field}
+									label='Исполнитель *'
+								/>
+							);
+						}}
+					/>
 				</div>
+				<Button
+					className='mt-5'
+					onClick={() => {
+						handleSubmit(onSubmit)();
+					}}
+				>
+					Создать задачу
+				</Button>
 			</Card>
 		</Form>
 	);

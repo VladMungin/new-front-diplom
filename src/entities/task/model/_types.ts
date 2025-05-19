@@ -17,7 +17,7 @@ export interface Task {
 	employee?: Employee;
 	project?: Project;
 	specialization?: Specialization;
-	type?: TypeOfTask;
+	type: TypeOfTask;
 }
 
 export interface Role {
