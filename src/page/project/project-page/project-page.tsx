@@ -18,20 +18,24 @@ import {
 	Card,
 	CardSection,
 	Divider,
+	Input,
 	List,
 	ListItem,
 	LoadingOverlay,
 	Modal,
 	MultiSelect,
 	Text,
+	Textarea,
 	Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAtomValue } from 'jotai';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
+import { IoIosSave } from 'react-icons/io';
+import { MdOutlineModeEdit } from 'react-icons/md';
 
 interface GroupedEmployee {
 	group: string;
@@ -113,6 +117,23 @@ export const ProjectPage = () => {
 		);
 	};
 
+	const {
+		control: editProjectControl,
+		reset,
+		getValues,
+	} = useForm<{
+		name: string;
+		description: string;
+	}>();
+
+	const [isEditable, setIsEditable] = useState(false);
+	useEffect(() => {
+		reset({
+			name: project?.name,
+			description: project?.description,
+		});
+	}, [isEditable]);
+
 	return (
 		<>
 			<Box pos='relative' mih='80vh'>
@@ -121,8 +142,55 @@ export const ProjectPage = () => {
 					zIndex={1000}
 					overlayProps={{ radius: 'sm', blur: 2 }}
 				/>
-				<Title order={1}>{project?.name}</Title>
-				<Text className='!mt-5 break-all'>{project?.description}</Text>
+				<div className='flex items-center justify-between'>
+					{!isEditable && <Title order={1}>{project?.name}</Title>}
+					{isEditable && (
+						<Controller
+							control={editProjectControl}
+							name='name'
+							render={({ field }) => <Input {...field} size='lg' />}
+						/>
+					)}
+					<Button
+						variant='transparent'
+						loading={isPending}
+						onClick={async () => {
+							if (isEditable) {
+								await updateProject(
+									{
+										name: getValues('name'),
+										description: getValues('description'),
+										id: projectId,
+									} as Project,
+									{
+										onSuccess: () => {
+											refetch();
+											setIsEditable(prev => !prev);
+										},
+									}
+								);
+							} else {
+								setIsEditable(prev => !prev);
+							}
+						}}
+					>
+						{!isEditable ? (
+							<MdOutlineModeEdit size={25} />
+						) : (
+							<IoIosSave size={25} />
+						)}
+					</Button>
+				</div>
+				{!isEditable && (
+					<Text className='!mt-5 break-all'>{project?.description}</Text>
+				)}
+				{isEditable && (
+					<Controller
+						control={editProjectControl}
+						name='description'
+						render={({ field }) => <Textarea className='mt-5' {...field} />}
+					/>
+				)}
 				<div className='grid w-full gap-5 mt-5 md:grid-cols-2 sm:grid-cols-1'>
 					<Card className='w-full ' withBorder>
 						<CardSection withBorder className='!px-4 py-2'>
@@ -140,7 +208,7 @@ export const ProjectPage = () => {
 								<Divider orientation='vertical' size='sm' />
 
 								<Link
-									href=''
+									href={`/tasks/create?projectId=${projectId}`}
 									className='underline text-(--mantine-color-blue-2)'
 								>
 									Создать задачу
