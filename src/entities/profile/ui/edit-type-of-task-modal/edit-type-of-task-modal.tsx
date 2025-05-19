@@ -53,17 +53,6 @@ export const EditTypeOfTaskModal = () => {
 
 	return (
 		<>
-			{/* <Button onClick={open} mt={10}>
-				Настройка типов задач
-			</Button>
-			<Modal
-				opened={opened}
-				onClose={close}
-				title='Настройки'
-				fullScreen
-				radius={0}
-				transitionProps={{ transition: 'fade', duration: 600 }}
-			> */}
 			<Form control={control}>
 				<Title order={4} className='!mt-3'>
 					Настройка ролей
@@ -125,7 +114,6 @@ export const EditTypeOfTaskModal = () => {
 					);
 				})}
 			</Form>
-			{/* </Modal> */}
 		</>
 	);
 };
