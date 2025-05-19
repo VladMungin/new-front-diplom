@@ -87,7 +87,8 @@ export const Navbar = ({ children }: NavbarProps) => {
             }}
 						/> */}
 				</div>
-				<Link href='/profile'>
+				<Link href='/profile' className='flex items-center gap-2 capitalize'>
+					{loginTokenData.data?.data.user.name}
 					<CgProfile className='w-[40px] h-[40px] cursor-pointer' />
 				</Link>
 			</AppShell.Header>

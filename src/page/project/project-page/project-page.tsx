@@ -39,7 +39,11 @@ export const ProjectPage = () => {
 	const searchParams = useSearchParams();
 	const projectId = searchParams.get('id');
 
-	const { data: project, isLoading } = useGetProjectById(projectId || '', {
+	const {
+		data: project,
+		isLoading,
+		refetch,
+	} = useGetProjectById(projectId || '', {
 		enabled: !!projectId,
 	});
 
@@ -57,9 +61,13 @@ export const ProjectPage = () => {
 
 	const [opened, { open, close }] = useDisclosure(false);
 
-	const { control, handleSubmit } = useForm<{ employees: string[] }>();
+	const {
+		control,
+		handleSubmit,
+		formState: { isDirty },
+	} = useForm<{ employees: string[] }>();
 
-	const { mutateAsync: updateProject } = useUpdateProject();
+	const { mutateAsync: updateProject, isPending } = useUpdateProject();
 
 	const onSubmit: SubmitHandler<{ employees: string[] }> = async data => {
 		const employeeIds = employees
@@ -71,10 +79,18 @@ export const ProjectPage = () => {
 			})
 			.filter(item => item !== undefined);
 
-		await updateProject({
-			...project,
-			employeeIds,
-		} as Project);
+		await updateProject(
+			{
+				id: projectId,
+				employeeIds,
+			} as Project,
+			{
+				onSuccess: () => {
+					refetch();
+					close();
+				},
+			}
+		);
 	};
 
 	return (
@@ -87,7 +103,7 @@ export const ProjectPage = () => {
 				/>
 				<Title order={1}>{project?.name}</Title>
 				<Text className='!mt-5 break-all'>{project?.description}</Text>
-				<div className='flex w-full gap-5'>
+				<div className='grid w-full gap-5 mt-5 md:grid-cols-2 sm:grid-cols-1'>
 					<Card className='w-full ' withBorder>
 						<CardSection withBorder className='!px-4 py-2'>
 							<Title order={3}>Задачи</Title>
@@ -141,20 +157,12 @@ export const ProjectPage = () => {
 						</div>
 						<CardSection withBorder className='!px-4 py-2 mt-auto'>
 							<ButtonGroup className='gap-2'>
-								<Link
-									href=''
-									className='underline text-(--mantine-color-blue-2)'
-								>
-									Все Участники
-								</Link>
-								<Divider orientation='vertical' size='sm' />
-
 								<Button
 									onClick={open}
 									unstyled
 									className='underline text-(--mantine-color-blue-2) cursor-pointer'
 								>
-									Добавить участника
+									Редактировать
 								</Button>
 							</ButtonGroup>
 						</CardSection>
@@ -162,7 +170,7 @@ export const ProjectPage = () => {
 				</div>
 			</Box>
 			<Modal opened={opened} onClose={close} title='Участники' centered>
-				<Form control={control}>
+				<Form control={control} className='min-h-[12vh] flex flex-col'>
 					<Controller
 						name='employees'
 						control={control}
@@ -177,17 +185,24 @@ export const ProjectPage = () => {
 									data={employeesForMultiSelect}
 									nothingFoundMessage='У вас еще нет сотрудников'
 									hidePickedOptions
+									withScrollArea={false}
+									styles={{ dropdown: { maxHeight: 200, overflowY: 'auto' } }}
+									comboboxProps={{
+										transitionProps: { duration: 200 },
+									}}
 								/>
 							);
 						}}
 					/>
 					<Button
-						className='mt-2'
+						className='mt-auto'
 						fullWidth
 						color='green'
 						onClick={() => {
 							handleSubmit(onSubmit)();
 						}}
+						loading={isPending}
+						disabled={!isDirty}
 					>
 						Сохранить
 					</Button>
