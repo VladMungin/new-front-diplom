@@ -33,6 +33,11 @@ import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
+interface GroupedEmployee {
+	group: string;
+	items: string[];
+}
+
 export const ProjectPage = () => {
 	const user = useAtomValue(userStore);
 
@@ -48,16 +53,31 @@ export const ProjectPage = () => {
 	});
 
 	const groupedEmployees = useMemo(() => {
-		if (project?.employees) {
+		if (project?.employees.length) {
 			return groupEmployeesBySpecialization(project?.employees as Employee[]);
-		}
+		} else return null;
 	}, [project]);
 
 	const { data: employees } = useGetEmployees(user?.id || '', {
 		enabled: !!user?.id,
 	});
 
-	const employeesForMultiSelect = employees?.map(employee => employee.fullName);
+	const employeesForMultiSelect: GroupedEmployee[] | undefined =
+		employees?.reduce<GroupedEmployee[]>((acc, employee) => {
+			console.log(employee);
+			const existingGroup = acc.find(
+				g => g.group === employee.specialization.name
+			);
+			if (existingGroup) {
+				existingGroup.items.push(employee.fullName);
+			} else {
+				acc.push({
+					group: employee.specialization.name,
+					items: [employee.fullName],
+				});
+			}
+			return acc;
+		}, []);
 
 	const [opened, { open, close }] = useDisclosure(false);
 
@@ -133,27 +153,31 @@ export const ProjectPage = () => {
 							<Title order={3}>Участники</Title>
 						</CardSection>
 						<div className='my-5'>
-							<List listStyleType='disc'>
-								{Object.entries(groupedEmployees || {}).map(
-									([specializationId, employees]) => (
-										<ListItem key={specializationId}>
-											Специализация: {specializationId}
-											<List listStyleType='revert'>
-												{employees.map(employee => (
-													<ListItem key={employee.id}>
-														<Link
-															href={`/employee?id=${employee.id}`}
-															className='underline text-(--mantine-color-blue-2)'
-														>
-															{employee.fullName}
-														</Link>
-													</ListItem>
-												))}
-											</List>
-										</ListItem>
-									)
-								)}
-							</List>
+							{groupedEmployees ? (
+								<List listStyleType='disc'>
+									{Object.entries(groupedEmployees || {}).map(
+										([specializationId, employees]) => (
+											<ListItem key={specializationId}>
+												{specializationId}
+												<List listStyleType='revert'>
+													{employees.map(employee => (
+														<ListItem key={employee.id}>
+															<Link
+																href={`/employee?id=${employee.id}`}
+																className='underline text-(--mantine-color-blue-2)'
+															>
+																{employee.fullName}
+															</Link>
+														</ListItem>
+													))}
+												</List>
+											</ListItem>
+										)
+									)}
+								</List>
+							) : (
+								<p>Участников на проекте еще нет</p>
+							)}
 						</div>
 						<CardSection withBorder className='!px-4 py-2 mt-auto'>
 							<ButtonGroup className='gap-2'>
@@ -177,6 +201,7 @@ export const ProjectPage = () => {
 						render={({ field }) => {
 							return (
 								<MultiSelect
+									searchable
 									label='Сотрудники'
 									{...field}
 									defaultValue={project?.employees.map(
