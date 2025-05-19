@@ -9,6 +9,7 @@ export interface Project {
 	user: User;
 	userId: string;
 	employees: Employee[];
+	employeeIds?: string[]
 	tasks: Task[];
 }
 

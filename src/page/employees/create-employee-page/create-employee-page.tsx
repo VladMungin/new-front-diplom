@@ -21,8 +21,12 @@ export type CreateEmployee = {
 
 export const CreateEmployeePage = () => {
 	const user = useAtomValue(userStore);
-	const { data: roles } = useGetRoles(user?.id || '');
-	const { data: specializations } = useGetSpecialization(user?.id || '');
+	const { data: roles } = useGetRoles(user?.id || '', {
+		enabled: !!user?.id,
+	});
+	const { data: specializations } = useGetSpecialization(user?.id || '', {
+		enabled: !!user?.id,
+	});
 
 	const { mutateAsync } = useCreateEmployee();
 	const { control } = useForm<CreateEmployee>();

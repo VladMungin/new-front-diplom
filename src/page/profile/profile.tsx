@@ -1,6 +1,7 @@
 'use client';
 
 import { EditRolesModal, EditTypeOfTaskModal } from '@/entities/profile';
+import { EditSpecializationModal } from '@/entities/profile/ui/edit-specializations-modal';
 import { userStore } from '@/entities/user';
 import {
 	Button,
@@ -45,6 +46,7 @@ export const ProfilePage = () => {
 				<div className='flex gap-5'>
 					<EditRolesModal />
 					<EditTypeOfTaskModal />
+					<EditSpecializationModal />
 				</div>
 			</Card>
 			<Modal

@@ -8,7 +8,7 @@ export const createRole = async (data: Role): Promise<Role> =>
 	(await baseApi.post(targetRole, data)).data;
 
 export const getRoles = async (userId: string | undefined): Promise<Role[]> =>
-	(await baseApi(`${targetRole}/${userId}`)).data;
+	(await baseApi(`${targetRole}/user/${userId}`)).data;
 
 export const updateRoles = async (data: Role): Promise<Role> =>
 	(
@@ -23,14 +23,24 @@ export const createSpecialization = async (
 	(await baseApi.post(targetSpecialization, data)).data;
 
 export const getSpecialization = async (userId: string): Promise<Role[]> =>
-	(await baseApi(`${targetSpecialization}/${userId}`)).data;
+	(await baseApi(`${targetSpecialization}/user/${userId}`)).data;
+
+export const updateSpecialization = async (data: Specialization): Promise<Specialization> =>
+	(
+		await baseApi.patch(`${targetSpecialization}/${data.id}`, {
+			...data,
+		})
+	).data;
+
 
 // typ of task
 export const createTypeOfTask = async (data: TypeOfTask): Promise<TypeOfTask> =>
 	(await baseApi.post(targetTypeOfTask, data)).data;
 
-export const getTypeOfTask = async (userId: string | undefined): Promise<Role[]> =>
-	(await baseApi(`${targetTypeOfTask}/${userId}`)).data;
+export const getTypeOfTask = async (
+	userId: string | undefined
+): Promise<Role[]> =>
+	(await baseApi(`${targetTypeOfTask}/user/${userId}`)).data;
 
 export const updateTypeOfTask = async (data: TypeOfTask): Promise<TypeOfTask> =>
 	(

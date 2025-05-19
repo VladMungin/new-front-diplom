@@ -13,9 +13,9 @@ export const ProjectCard = ({ project }: { project: Project }) => {
 			href={`/project?id=${project.id}`}
 		>
 			<CardSection withBorder className='!flex !flex-col !items-center !py-1'>
-				<h3 className='text-2xl font-bold'>{project.name}</h3>
+				<h3 className='text-2xl font-bold text-center'>{project.name}</h3>
 			</CardSection>
-			<p className='mx-4 pt-2'>{project.description}</p>
+			<p className='mx-4 py-2 break-all'>{project.description}</p>
 		</Card>
 	);
 };

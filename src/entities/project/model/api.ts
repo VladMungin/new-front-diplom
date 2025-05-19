@@ -7,5 +7,13 @@ export const createProject = async (data: ProjectRequest): Promise<Project> => {
 };
 
 export const getProjects = async (userId: string): Promise<Project[]> => {
-	return (await baseApi(`${targetProject}/${userId}`)).data;
+	return (await baseApi(`${targetProject}/user/${userId}`)).data;
 };
+
+export const getProjectById = async (id: string): Promise<Project> =>
+	(await baseApi(`${targetProject}/${id}`)).data;
+
+export const updateProject = async (data: Project): Promise<Project> =>
+	await baseApi.patch(`${targetProject}/${data.id}`, {
+		...data,
+	});
