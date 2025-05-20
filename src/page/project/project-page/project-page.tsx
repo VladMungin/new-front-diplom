@@ -232,7 +232,7 @@ export const ProjectPage = () => {
 						<CardSection withBorder className='!px-4 py-2 mt-auto'>
 							<ButtonGroup className='gap-2'>
 								<Link
-									href=''
+									href={`/project/all-task?projectId=${projectId}`}
 									className='underline text-(--mantine-color-blue-2)'
 								>
 									Все задачи

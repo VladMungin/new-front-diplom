@@ -25,7 +25,9 @@ export const ProjectCreate = () => {
 
 	const { control } = useForm<CreateProject>();
 
-	const { data: employees } = useGetEmployees(user?.id || '');
+	const { data: employees } = useGetEmployees(user?.id || '', {
+		enabled: !!user?.id,
+	});
 
 	const { mutateAsync: createProject, isPending } = useCreateProject();
 

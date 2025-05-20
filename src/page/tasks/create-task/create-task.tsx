@@ -16,7 +16,7 @@ export const CreateTask = () => {
 
 	const searchParams = useSearchParams();
 
-	const { mutateAsync: createTask } = useCreateTask();
+	const { mutateAsync: createTask, isPending } = useCreateTask();
 
 	const { data: specializations } = useGetSpecialization(user?.id as string, {
 		enabled: !!user?.id,
@@ -141,6 +141,7 @@ export const CreateTask = () => {
 					/>
 				</div>
 				<Button
+					loading={isPending}
 					className='mt-5'
 					onClick={() => {
 						handleSubmit(onSubmit)();
