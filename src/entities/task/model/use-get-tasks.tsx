@@ -4,9 +4,9 @@ import { keyTasksGet } from './_constants';
 import { Task } from './_types';
 import { getTasks } from './api';
 
-export const useGetTasks = (config?: UseQueryConfig<Task[]>) =>
+export const useGetTasks = (userId: string, config?: UseQueryConfig<Task[]>) =>
 	useQuery({
-		queryFn: getTasks,
+		queryFn: () => getTasks(userId),
 		queryKey: keyTasksGet,
 		...config,
 	});
