@@ -25,7 +25,7 @@ export const Pages: PagesI[] = [
 			},
 			{
 				label: 'Все задачи',
-				href: '/all-tasks',
+				href: '/tasks/all-tasks',
 			},
 			{
 				label: 'Создать задачу',

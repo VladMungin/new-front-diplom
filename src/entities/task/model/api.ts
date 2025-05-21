@@ -7,3 +7,6 @@ export const createTask = async (data: Task): Promise<Task> =>
 
 export const getTasks = async (userId: string): Promise<Task[]> =>
 	(await baseApi(`${targetTask}/user/${userId}`)).data;
+
+export const getTaskById = async (id: string): Promise<Task> =>
+	(await baseApi(`${targetTask}/${id}`)).data;

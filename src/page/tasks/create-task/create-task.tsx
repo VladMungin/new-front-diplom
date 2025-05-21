@@ -2,6 +2,7 @@
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
+import { useGetProjects } from '@/entities/project';
 import { Task, useCreateTask } from '@/entities/task';
 import { userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
@@ -30,6 +31,15 @@ export const CreateTask = () => {
 		enabled: !!user?.id,
 	});
 
+	const { data: projects } = useGetProjects(user?.id || '', {
+		enabled: !!user?.id,
+	});
+
+	const projectsForMultiSelect = projects?.map(project => ({
+		label: project.name,
+		value: project.id as string,
+	}));
+
 	const specializationsForMultiSelect = specializations?.map(
 		specialization => ({
 			label: specialization.name,
@@ -55,7 +65,7 @@ export const CreateTask = () => {
 			...data,
 			currentTime: 0,
 			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
-			projectId: searchParams.get('projectId') as string,
+			// projectId: searchParams.get('projectId') as string,
 		});
 	};
 
@@ -135,6 +145,19 @@ export const CreateTask = () => {
 									data={employeesForMultiSelect}
 									{...field}
 									label='Исполнитель *'
+								/>
+							);
+						}}
+					/>
+					<Controller
+						control={control}
+						name='projectId'
+						render={({ field }) => {
+							return (
+								<Select
+									data={projectsForMultiSelect}
+									{...field}
+									label='Проект *'
 								/>
 							);
 						}}
