@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 
 export const TasksPage = () => {
 	const user = useAtomValue(userStore);
-	const { data: tasks } = useGetTasks({
+	const { data: tasks } = useGetTasks(user?.id as string, {
 		enabled: !!user?.id,
 	});
 
@@ -21,11 +21,11 @@ export const TasksPage = () => {
 		if (tasks?.length) {
 			return tasks.reduce(
 				(acc, task) => {
-					const projectName = task.project.name;
-					if (!acc[projectName]) {
-						acc[projectName] = [];
+					const projectName = task.project?.name;
+					if (!acc[projectName as string]) {
+						acc[projectName as string] = [];
 					}
-					acc[projectName].push(task);
+					acc[projectName as string].push(task);
 					return acc;
 				},
 				{} as Record<string, Task[]>
@@ -53,7 +53,7 @@ export const TasksPage = () => {
 								{projectTasks.map(task => (
 									<TaskCard
 										task={task}
-										key={`${task.id}-${task.project.name}`}
+										key={`${task.id}-${task?.project?.name}`}
 									/>
 								))}
 							</AccordionPanel>

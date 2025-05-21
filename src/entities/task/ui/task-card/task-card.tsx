@@ -1,6 +1,6 @@
 import { Card, CardSection } from '@mantine/core';
 import dayjs from 'dayjs';
-import { Task } from '../../model';
+import { Task, TASK_STATUS } from '../../model';
 interface TaskCardProps {
 	task: Task;
 }
@@ -35,10 +35,13 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 			</div>
 			<CardSection
 				withBorder
-				className='!flex !justify-between !mt-3 !py-3 !px-2'
+				className='!flex !justify-between !mt-auto !py-3 !px-2'
 			>
 				<p>
-					Статус: <span className='font-bold'>{task?.status}</span>
+					Статус:{' '}
+					<span className='font-bold'>
+						{TASK_STATUS[task?.status as unknown as keyof typeof TASK_STATUS]}
+					</span>
 				</p>
 				<p>
 					Номер: <span className='font-bold'>{task?.id}</span>
