@@ -14,7 +14,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 			padding={0}
 			className='max-w-[380px]'
 			component='a'
-			href={`/task?id=${task?.id}`}
+			href={`/tasks/task/${task?.id}`}
 		>
 			<CardSection withBorder className='!flex !flex-col !items-center !py-1'>
 				<h3 className='text-2xl font-bold'>{task?.title}</h3>
@@ -48,20 +48,5 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 				</p>
 			</CardSection>
 		</Card>
-		// <div className='flex flex-col items-center max-w-[380px] border border-white rounded-xl'>
-		// 	<div className=''>
-		// 		<h3>{task.title}</h3>
-		// 		<p>{task.type.name}</p>
-		// 	</div>
-		// 	<div className=''>
-		// 		<p>{task.description}</p>
-		// 		<p>{task.employee.fullName}</p>
-		// 		<p>{task.timeToCompleat}</p>
-		// 	</div>
-		// 	<div className=''>
-		// 		<p>{task.status}</p>
-		// 		<p>{task.id}</p>
-		// 	</div>
-		// </div>
 	);
 };

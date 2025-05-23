@@ -1,11 +1,11 @@
-import { Employee, Specialization } from '@/entities/employee'
-import { Project } from '@/entities/project'
-import { User } from '@/entities/user'
-import { TASK_STATUS } from './_constants'
+import { Employee, Specialization } from '@/entities/employee';
+import { Project } from '@/entities/project';
+import { User } from '@/entities/user';
+import { TASK_STATUS } from './_constants';
 
 export interface Task {
 	id?: number;
-	status?: TASK_STATUS;
+	status: keyof typeof TASK_STATUS;
 	title: string;
 	description: string;
 	employeeId: string;

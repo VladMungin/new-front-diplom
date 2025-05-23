@@ -1,7 +1,9 @@
 'use client';
 
-import { useGetTaskById } from '@/entities/task';
+import { getTextByStatus, useGetTaskById } from '@/entities/task';
+import { Button, ButtonGroup, Title } from '@mantine/core';
 import { useParams } from 'next/navigation';
+import { useStopwatch } from 'react-timer-hook';
 
 export const TaskPage = () => {
 	const params = useParams();
@@ -9,12 +11,20 @@ export const TaskPage = () => {
 	const { data: taskData } = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
-	if (!taskData?.id) {
+
+	const { milliseconds, seconds, minutes, hours, isRunning, start, pause } =
+		useStopwatch({ autoStart: false, interval: 20 });
+
+	if (!taskData) {
 		return <div>Задача не найдена</div>;
 	}
-
 	const timeToCompleat = taskData.timeToCompleat / 1000 / 60 / 60;
 	const currentTime = taskData.currentTime || 0 / 1000 / 60 / 60;
+
+	// Форматируем время в 00:00:00
+	const formatTime = (time: number) => {
+		return time.toString().padStart(2, '0');
+	};
 
 	return (
 		<div className='min-h-screen bg-gray-800 font-sans'>
@@ -28,6 +38,12 @@ export const TaskPage = () => {
 							Создана от {new Date(taskData.createdAt).toLocaleDateString()}
 						</span>
 					</div>
+					<ButtonGroup className='mt-2'>
+						<Button variant='default'>
+							{getTextByStatus(taskData.status)}
+						</Button>
+						<Button variant='default'>Перевести задачу</Button>
+					</ButtonGroup>
 				</div>
 			</div>
 			<div className='max-w-7xl mx-auto  py-6'>
@@ -76,6 +92,30 @@ export const TaskPage = () => {
 						</div>
 					</div>
 				</div>
+				{taskData.status === 'IN_WORK' ||
+					(true && (
+						<div className='mt-5 flex flex-col items-center bg-gray-700 border-y border-gray-400 shadow-sm py-2'>
+							<h1>react-timer-hook</h1>
+							<div style={{ fontSize: '100px' }}>
+								<span>{formatTime(hours)}</span>:
+								<span>{formatTime(minutes)}</span>:
+								<span>{formatTime(seconds)}</span>
+							</div>
+							<Button
+								variant='filled'
+								onClick={() => {
+									if (isRunning) pause();
+									else start();
+								}}
+								className='duration-300 !rounded-3xl'
+								size='lg'
+							>
+								<Title order={3} className='!my-5'>
+									{isRunning ? 'Пауза' : 'Начать'}
+								</Title>
+							</Button>
+						</div>
+					))}
 			</div>
 		</div>
 	);
