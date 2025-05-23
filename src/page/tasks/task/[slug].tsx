@@ -17,8 +17,15 @@ export const TaskPage = () => {
 		enabled: !!taskId,
 	});
 
-	const { milliseconds, seconds, minutes, hours, isRunning, start, pause } =
-		useStopwatch({ autoStart: false, interval: 20 });
+	const {
+		seconds,
+		minutes,
+		hours,
+		isRunning,
+		start,
+		pause,
+		totalMilliseconds,
+	} = useStopwatch({ autoStart: false, interval: 20 });
 
 	const { mutateAsync } = useUpdateTask();
 
@@ -26,7 +33,7 @@ export const TaskPage = () => {
 		if (minutes && minutes % 15 === 0 && taskData) {
 			mutateAsync({
 				...taskData,
-				currentTime: milliseconds + (taskData?.currentTime || 0),
+				currentTime: totalMilliseconds + taskData.currentTime,
 			});
 		}
 	}, [minutes]);
@@ -45,7 +52,7 @@ export const TaskPage = () => {
 	};
 
 	const timeToCompleatFormatted = formatHoursMinutes(taskData.timeToCompleat);
-	const currentTimeFormatted = formatHoursMinutes(taskData.currentTime || 0);
+	const currentTimeFormatted = formatHoursMinutes(taskData.currentTime);
 
 	// Форматируем время в 00:00:00
 	const formatTime = (time: number) => {
@@ -135,8 +142,7 @@ export const TaskPage = () => {
 										mutateAsync(
 											{
 												...taskData,
-												currentTime:
-													milliseconds + (taskData?.currentTime || 0),
+												currentTime: totalMilliseconds + taskData.currentTime,
 											},
 											{
 												onSuccess: () => {

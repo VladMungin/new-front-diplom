@@ -12,7 +12,7 @@ export interface Task {
 	projectId: string;
 	createdAt: Date;
 	timeToCompleat: number;
-	currentTime?: number;
+	currentTime: number;
 	typeOfTaskId: string;
 	specializationId: string;
 	employee?: Employee;
