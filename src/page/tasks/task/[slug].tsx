@@ -2,6 +2,7 @@
 
 import {
 	getTextByStatus,
+	TASK_STATUS,
 	useGetTaskById,
 	useUpdateTask,
 } from '@/entities/task';
@@ -89,7 +90,11 @@ export const TaskPage = () => {
 							<div className='space-y-3 text-sm text-white'>
 								<div className='flex'>
 									<span className='font-medium w-1/3'>Статус:</span>
-									<span>{taskData.status || 'N/A'}</span>
+									<span>
+										{TASK_STATUS[
+											taskData?.status as unknown as keyof typeof TASK_STATUS
+										] || 'N/A'}
+									</span>
 								</div>
 								<div className='flex'>
 									<span className='font-medium w-1/3'>Проект:</span>
