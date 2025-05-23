@@ -1,8 +1,13 @@
 'use client';
 
-import { getTextByStatus, useGetTaskById } from '@/entities/task';
+import {
+	getTextByStatus,
+	useGetTaskById,
+	useUpdateTask,
+} from '@/entities/task';
 import { Button, ButtonGroup, Title } from '@mantine/core';
 import { useParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
 export const TaskPage = () => {
@@ -14,6 +19,17 @@ export const TaskPage = () => {
 
 	const { milliseconds, seconds, minutes, hours, isRunning, start, pause } =
 		useStopwatch({ autoStart: false, interval: 20 });
+
+	const { mutateAsync } = useUpdateTask();
+
+	useEffect(() => {
+		if (minutes && minutes % 15 === 0 && taskData) {
+			mutateAsync({
+				...taskData,
+				currentTime: milliseconds + (taskData?.currentTime || 0),
+			});
+		}
+	}, [minutes]);
 
 	if (!taskData) {
 		return <div>Задача не найдена</div>;
@@ -104,8 +120,13 @@ export const TaskPage = () => {
 							<Button
 								variant='filled'
 								onClick={() => {
-									if (isRunning) pause();
-									else start();
+									if (isRunning) {
+										pause();
+										mutateAsync({
+											...taskData,
+											currentTime: milliseconds + (taskData?.currentTime || 0),
+										});
+									} else start();
 								}}
 								className='duration-300 !rounded-3xl'
 								size='lg'
