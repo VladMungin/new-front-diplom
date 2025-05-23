@@ -13,7 +13,7 @@ import { useStopwatch } from 'react-timer-hook';
 export const TaskPage = () => {
 	const params = useParams();
 	const taskId = params.slug;
-	const { data: taskData } = useGetTaskById(taskId as string, {
+	const { data: taskData, refetch } = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
 
@@ -34,8 +34,18 @@ export const TaskPage = () => {
 	if (!taskData) {
 		return <div>Задача не найдена</div>;
 	}
-	const timeToCompleat = taskData.timeToCompleat / 1000 / 60 / 60;
-	const currentTime = taskData.currentTime || 0 / 1000 / 60 / 60;
+
+	// Функция для преобразования миллисекунд в формат HH:MM
+	const formatHoursMinutes = (milliseconds: number) => {
+		const totalSeconds = Math.floor(milliseconds / 1000);
+		const totalMinutes = Math.floor(totalSeconds / 60);
+		const hours = Math.floor(totalMinutes / 60);
+		const minutes = totalMinutes % 60;
+		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} часа`;
+	};
+
+	const timeToCompleatFormatted = formatHoursMinutes(taskData.timeToCompleat);
+	const currentTimeFormatted = formatHoursMinutes(taskData.currentTime || 0);
 
 	// Форматируем время в 00:00:00
 	const formatTime = (time: number) => {
@@ -90,11 +100,11 @@ export const TaskPage = () => {
 									<span className='font-medium w-1/3'>
 										Время на выполнение:
 									</span>
-									<span>{timeToCompleat} часа</span>
+									<span>{timeToCompleatFormatted}</span>
 								</div>
 								<div className='flex'>
 									<span className='font-medium w-1/3'>Затраченное время:</span>
-									<span>{currentTime} часа</span>
+									<span>{currentTimeFormatted}</span>
 								</div>
 							</div>
 						</div>
@@ -122,10 +132,18 @@ export const TaskPage = () => {
 								onClick={() => {
 									if (isRunning) {
 										pause();
-										mutateAsync({
-											...taskData,
-											currentTime: milliseconds + (taskData?.currentTime || 0),
-										});
+										mutateAsync(
+											{
+												...taskData,
+												currentTime:
+													milliseconds + (taskData?.currentTime || 0),
+											},
+											{
+												onSuccess: () => {
+													refetch();
+												},
+											}
+										);
 									} else start();
 								}}
 								className='duration-300 !rounded-3xl'
