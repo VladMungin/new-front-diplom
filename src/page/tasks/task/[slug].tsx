@@ -95,7 +95,7 @@ export const TaskPage = () => {
 				{taskData.status === 'IN_WORK' ||
 					(true && (
 						<div className='mt-5 flex flex-col items-center bg-gray-700 border-y border-gray-400 shadow-sm py-2'>
-							<h1>react-timer-hook</h1>
+							<h1>Таймер</h1>
 							<div style={{ fontSize: '100px' }}>
 								<span>{formatTime(hours)}</span>:
 								<span>{formatTime(minutes)}</span>:
