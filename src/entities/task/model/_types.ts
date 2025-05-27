@@ -19,6 +19,7 @@ export interface Task {
 	project?: Project;
 	specialization?: Specialization;
 	type: TypeOfTask;
+	createdById: string;
 }
 
 export interface Role {
@@ -37,4 +38,25 @@ export interface TypeOfTask {
 	id?: string;
 	name: string;
 	task?: Task[];
+}
+
+export interface CreateTaskLogDto {
+	taskId: number;
+	employeeId: string;
+	hoursWorked?: number;
+}
+
+export interface UpdateTaskLogDto {
+	taskId?: number;
+	employeeId?: string;
+	hoursWorked?: number | null;
+}
+
+export interface TaskLog {
+	id: string;
+	taskId: number;
+	employeeId: string;
+	hoursWorked: number | null;
+	task: { id: number; title: string };
+	employee: { id: string; name: string };
 }

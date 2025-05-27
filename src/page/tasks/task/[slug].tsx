@@ -3,6 +3,7 @@
 import {
 	getTextByStatus,
 	useGetTaskById,
+	useGetTaskLogAll,
 	useUpdateTask,
 } from '@/entities/task';
 import { Button, ButtonGroup, Title } from '@mantine/core';
@@ -16,11 +17,14 @@ export const TaskPage = () => {
 	const { data: taskData } = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
+	const { data: taskLogAll } = useGetTaskLogAll();
+	console.log('taskLogAll:', taskLogAll);
 
 	const { milliseconds, seconds, minutes, hours, isRunning, start, pause } =
 		useStopwatch({ autoStart: false, interval: 20 });
 
 	const { mutateAsync } = useUpdateTask();
+	// const { mutateAsync: updateTaskLog } = useUpdateTaskLog();
 
 	useEffect(() => {
 		if (minutes && minutes % 15 === 0 && taskData) {
@@ -34,8 +38,8 @@ export const TaskPage = () => {
 	if (!taskData) {
 		return <div>Задача не найдена</div>;
 	}
-	const timeToCompleat = taskData.timeToCompleat / 1000 / 60 / 60;
-	const currentTime = taskData.currentTime || 0 / 1000 / 60 / 60;
+	const timeToCompleatInHour = taskData.timeToCompleat / 1000 / 60 / 60;
+	const currentTime = (taskData.currentTime || 0) / 1000 / 60 / 60;
 
 	// Форматируем время в 00:00:00
 	const formatTime = (time: number) => {
@@ -90,7 +94,7 @@ export const TaskPage = () => {
 									<span className='font-medium w-1/3'>
 										Время на выполнение:
 									</span>
-									<span>{timeToCompleat} часа</span>
+									<span>{timeToCompleatInHour} часа</span>
 								</div>
 								<div className='flex'>
 									<span className='font-medium w-1/3'>Затраченное время:</span>
