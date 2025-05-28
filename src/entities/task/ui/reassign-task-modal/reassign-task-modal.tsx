@@ -1,6 +1,6 @@
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
-import { userStore } from '@/entities/user';
+import { adminStore } from '@/entities/user';
 import { Button, Modal, Select } from '@mantine/core';
 import {
 	QueryObserverResult,
@@ -35,18 +35,18 @@ export const ReassignTaskModal = ({
 		type: string;
 		specialization: string;
 	}>();
-	const user = useAtomValue(userStore);
+	const adminId = useAtomValue(adminStore);
 
-	const { data: employees } = useGetEmployees(user?.id || '', {
-		enabled: !!user?.id,
+	const { data: employees } = useGetEmployees(adminId || '', {
+		enabled: !!adminId,
 	});
 
-	const { data: specializations } = useGetSpecialization(user?.id || '', {
-		enabled: !!user?.id,
+	const { data: specializations } = useGetSpecialization(adminId || '', {
+		enabled: !!adminId,
 	});
 
-	const { data: typeOfTasks } = useGetTypeOfTasks(user?.id || '', {
-		enabled: !!user?.id,
+	const { data: typeOfTasks } = useGetTypeOfTasks(adminId || '', {
+		enabled: !!adminId,
 	});
 
 	const employeesForSelect = employees?.map(employee => ({

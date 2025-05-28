@@ -11,7 +11,6 @@ export const ProjectTasksPage = () => {
 
 	const { data } = useGetProjectById(projectId as string);
 
-	console.log(data?.tasks);
 	return (
 		<div className='grid grid-cols-3'>
 			{data?.tasks.map(task => <TaskCard task={task} key={task.id} />)}

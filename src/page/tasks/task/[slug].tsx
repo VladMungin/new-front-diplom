@@ -24,7 +24,6 @@ export const TaskPage = () => {
 		enabled: !!taskId,
 	});
 	const { data: taskLogAll } = useGetTaskLogAll();
-	console.log('taskLogAll:', taskLogAll);
 
 	const {
 		seconds,

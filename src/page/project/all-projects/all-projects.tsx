@@ -1,14 +1,15 @@
 'use client';
 
 import { ProjectCard, useGetProjects } from '@/entities/project';
-import { userStore } from '@/entities/user';
+import { adminStore } from '@/entities/user';
 import { Box, LoadingOverlay } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 
 export const AllProjectsPage = () => {
-	const user = useAtomValue(userStore);
-	const { data: projects, isLoading } = useGetProjects(user?.id || '', {
-		enabled: !!user?.id,
+	// const user = useAtomValue(userStore);
+	const adminId = useAtomValue(adminStore);
+	const { data: projects, isLoading } = useGetProjects(adminId || '', {
+		enabled: !!adminId,
 	});
 
 	console.log(projects);

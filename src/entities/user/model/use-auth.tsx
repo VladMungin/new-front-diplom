@@ -2,13 +2,14 @@ import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
-import { userStore } from './_store';
+import { adminStore, userStore } from './_store';
 import { Auth } from './_types';
 import { login, loginToken, register } from './api';
 
 export const useAuth = () => {
 	const [cookies, setCookie] = useCookies(['access_token']);
 	const setUser = useSetAtom(userStore);
+	const setAdminId = useSetAtom(adminStore);
 	const router = useRouter();
 
 	const isAuth = !!cookies.access_token;
@@ -22,6 +23,7 @@ export const useAuth = () => {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.user);
+			setAdminId(data.user.company.user[0].id);
 			router.push('/company/edit');
 		},
 	});
@@ -36,6 +38,8 @@ export const useAuth = () => {
 			});
 
 			setUser(data.user);
+			setAdminId(data.user.company.user[0].id);
+
 			router.push('/company/edit');
 		},
 	});
@@ -49,6 +53,7 @@ export const useAuth = () => {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.data.user);
+			setAdminId(data.data.user.company.user[0].id);
 		},
 	});
 
