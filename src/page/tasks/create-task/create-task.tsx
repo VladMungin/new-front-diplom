@@ -3,7 +3,7 @@
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
 import { Task, useCreateTask } from '@/entities/task';
-import { userStore } from '@/entities/user';
+import { adminStore, userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
 import { Button, Card, Input, Select, Textarea } from '@mantine/core';
 import { TimePicker } from '@mantine/dates';
@@ -13,21 +13,22 @@ import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
 export const CreateTask = () => {
 	const user = useAtomValue(userStore);
+	const adminId = useAtomValue(adminStore);
 	const searchParams = useSearchParams();
 	const projectId = searchParams.get('id');
 
 	const { mutateAsync: createTask, isPending } = useCreateTask();
 
-	const { data: specializations } = useGetSpecialization(user?.id as string, {
-		enabled: !!user?.id,
+	const { data: specializations } = useGetSpecialization(adminId as string, {
+		enabled: !!adminId,
 	});
 
-	const { data: typeOfTasks } = useGetTypeOfTasks(user?.id as string, {
-		enabled: !!user?.id,
+	const { data: typeOfTasks } = useGetTypeOfTasks(adminId as string, {
+		enabled: !!adminId,
 	});
 
-	const { data: employees } = useGetEmployees(user?.id as string, {
-		enabled: !!user?.id,
+	const { data: employees } = useGetEmployees(adminId as string, {
+		enabled: !!adminId,
 	});
 
 	const specializationsForMultiSelect = specializations?.map(

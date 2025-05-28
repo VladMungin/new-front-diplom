@@ -1,7 +1,7 @@
 'use client';
 
 import { Employee, useGetEmployees } from '@/entities/employee';
-import { userStore } from '@/entities/user';
+import { adminStore } from '@/entities/user';
 import { useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
 import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
@@ -20,11 +20,11 @@ const employeeValidationSchema = yup.object().shape({
 });
 
 export const AllEmployeesProjects = () => {
-	const user = useAtomValue(userStore);
+	const adminId = useAtomValue(adminStore);
 	const { data: employeesData, isLoading } = useGetEmployees(
-		user?.id as string,
+		adminId as string,
 		{
-			enabled: !!user?.id,
+			enabled: !!adminId,
 		}
 	);
 
@@ -47,6 +47,14 @@ export const AllEmployeesProjects = () => {
 				mantineEditTextInputProps: {
 					error: validationErrors.email,
 				},
+			},
+			{
+				accessorKey: 'specialization.name',
+				header: 'Специализация',
+			},
+			{
+				accessorKey: 'role.name',
+				header: 'Роль',
 			},
 			{
 				accessorKey: 'phone',

@@ -87,21 +87,35 @@ export const ReassignTaskModal = ({
 					name='employeeId'
 					control={control}
 					render={({ field }) => {
-						return <Select {...field} data={employeesForSelect} />;
+						return (
+							<Select {...field} data={employeesForSelect} label='Сотрудник' />
+						);
 					}}
 				/>
 				<Controller
 					name='specialization'
 					control={control}
 					render={({ field }) => {
-						return <Select {...field} data={specializationsForSelect} />;
+						return (
+							<Select
+								{...field}
+								data={specializationsForSelect}
+								label='Специализация'
+							/>
+						);
 					}}
 				/>
 				<Controller
 					name='type'
 					control={control}
 					render={({ field }) => {
-						return <Select {...field} data={typeOfTasksForSelect} />;
+						return (
+							<Select
+								{...field}
+								data={typeOfTasksForSelect}
+								label='Тип задачи'
+							/>
+						);
 					}}
 				/>
 				<Button
