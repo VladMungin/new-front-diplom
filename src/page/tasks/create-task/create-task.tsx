@@ -2,7 +2,7 @@
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
-import { Task, useCreateTask, useCreateTaskLog } from '@/entities/task';
+import { Task, useCreateTask } from '@/entities/task';
 import { userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
 import { Button, Card, Input, Select, Textarea } from '@mantine/core';
@@ -16,20 +16,7 @@ export const CreateTask = () => {
 	const searchParams = useSearchParams();
 	const projectId = searchParams.get('id');
 
-	const { mutateAsync: createTaskLog, isPending: isPendingTaskLog } =
-		useCreateTaskLog();
-	const { mutateAsync: createTask } = useCreateTask({
-		onSuccess: data => {
-			if (data && data.id) {
-				createTaskLog({
-					employee: { id: data.employee?.id, name: data.employee?.fullName },
-					employeeId: data.employeeId,
-					taskId: data.id,
-					hoursWorked: 0,
-				});
-			}
-		},
-	});
+	const { mutateAsync: createTask, isPending } = useCreateTask();
 
 	const { data: specializations } = useGetSpecialization(user?.id as string, {
 		enabled: !!user?.id,
@@ -69,7 +56,7 @@ export const CreateTask = () => {
 			currentTime: 0,
 			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
 			createdById: user!.id,
-			projectId: projectId as string
+			projectId: projectId as string,
 		});
 	};
 
@@ -168,7 +155,7 @@ export const CreateTask = () => {
 					/> */}
 				</div>
 				<Button
-					loading={isPendingTaskLog}
+					loading={isPending}
 					className='mt-5'
 					onClick={() => {
 						handleSubmit(onSubmit)();
