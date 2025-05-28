@@ -2,8 +2,7 @@
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
-import { useGetProjects } from '@/entities/project';
-import { Task, useCreateTask } from '@/entities/task';
+import { Task, useCreateTask, useCreateTaskLog } from '@/entities/task';
 import { userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
 import { Button, Card, Input, Select, Textarea } from '@mantine/core';
@@ -14,10 +13,23 @@ import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
 export const CreateTask = () => {
 	const user = useAtomValue(userStore);
-
 	const searchParams = useSearchParams();
+	const projectId = searchParams.get('id');
 
-	const { mutateAsync: createTask, isPending } = useCreateTask();
+	const { mutateAsync: createTaskLog, isPending: isPendingTaskLog } =
+		useCreateTaskLog();
+	const { mutateAsync: createTask } = useCreateTask({
+		onSuccess: data => {
+			if (data && data.id) {
+				createTaskLog({
+					employee: { id: data.employee?.id, name: data.employee?.fullName },
+					employeeId: data.employeeId,
+					taskId: data.id,
+					hoursWorked: 0,
+				});
+			}
+		},
+	});
 
 	const { data: specializations } = useGetSpecialization(user?.id as string, {
 		enabled: !!user?.id,
@@ -30,15 +42,6 @@ export const CreateTask = () => {
 	const { data: employees } = useGetEmployees(user?.id as string, {
 		enabled: !!user?.id,
 	});
-
-	const { data: projects } = useGetProjects(user?.id || '', {
-		enabled: !!user?.id,
-	});
-
-	const projectsForMultiSelect = projects?.map(project => ({
-		label: project.name,
-		value: project.id as string,
-	}));
 
 	const specializationsForMultiSelect = specializations?.map(
 		specialization => ({
@@ -65,7 +68,8 @@ export const CreateTask = () => {
 			...data,
 			currentTime: 0,
 			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
-			// projectId: searchParams.get('projectId') as string,
+			createdById: user!.id,
+			projectId: projectId as string
 		});
 	};
 
@@ -149,7 +153,7 @@ export const CreateTask = () => {
 							);
 						}}
 					/>
-					<Controller
+					{/* <Controller
 						control={control}
 						name='projectId'
 						render={({ field }) => {
@@ -161,10 +165,10 @@ export const CreateTask = () => {
 								/>
 							);
 						}}
-					/>
+					/> */}
 				</div>
 				<Button
-					loading={isPending}
+					loading={isPendingTaskLog}
 					className='mt-5'
 					onClick={() => {
 						handleSubmit(onSubmit)();

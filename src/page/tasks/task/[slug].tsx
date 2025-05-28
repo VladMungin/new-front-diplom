@@ -5,6 +5,7 @@ import {
 	getTextByStatus,
 	TASK_STATUS,
 	useGetTaskById,
+	useGetTaskLogAll,
 	useUpdateTask,
 } from '@/entities/task';
 import { ReassignTaskModal } from '@/entities/task/ui/reassign-task-modal/reassign-task-modal';
@@ -22,6 +23,8 @@ export const TaskPage = () => {
 	const { data: taskData, refetch } = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
+	const { data: taskLogAll } = useGetTaskLogAll();
+	console.log('taskLogAll:', taskLogAll);
 
 	const {
 		seconds,
