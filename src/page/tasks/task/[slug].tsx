@@ -78,9 +78,12 @@ export const TaskPage = () => {
 						<h1 className='text-2xl font-bold text-white'>
 							#{taskData.id} {taskData.title}
 						</h1>
-						<div className='text-sm text-white'>
+						<div className='flex gap-2 text-sm text-white'>
 							<span>
 								Создана от {new Date(taskData.createdAt).toLocaleDateString()}
+							</span>
+							<span>
+								Создал {taskData.createdBy.name}
 							</span>
 						</div>
 						<ButtonGroup className='mt-2'>

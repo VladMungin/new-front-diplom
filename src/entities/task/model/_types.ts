@@ -20,6 +20,9 @@ export interface Task {
 	specialization?: Specialization;
 	type: TypeOfTask;
 	createdById: string;
+	createdBy: {
+		name: string;
+	};
 }
 
 export interface Role {
