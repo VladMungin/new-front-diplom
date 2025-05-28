@@ -6,5 +6,7 @@ export const getTextByStatus = (status: keyof typeof TASK_STATUS) => {
 			return 'Приступить'
 		case 'IN_WORK':
 			return 'Завершить'
+		case 'DONE':
+			return 'Завершено'
 	}
 };
