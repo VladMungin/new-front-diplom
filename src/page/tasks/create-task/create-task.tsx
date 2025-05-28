@@ -2,17 +2,19 @@
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees } from '@/entities/employee';
-import { useGetProjects } from '@/entities/project';
 import { Task, useCreateTask, useCreateTaskLog } from '@/entities/task';
 import { userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
 import { Button, Card, Input, Select, Textarea } from '@mantine/core';
 import { TimePicker } from '@mantine/dates';
 import { useAtomValue } from 'jotai';
+import { useSearchParams } from 'next/navigation';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
 export const CreateTask = () => {
 	const user = useAtomValue(userStore);
+	const searchParams = useSearchParams();
+	const projectId = searchParams.get('id');
 
 	const { mutateAsync: createTaskLog, isPending: isPendingTaskLog } =
 		useCreateTaskLog();
@@ -41,15 +43,6 @@ export const CreateTask = () => {
 		enabled: !!user?.id,
 	});
 
-	const { data: projects } = useGetProjects(user?.id || '', {
-		enabled: !!user?.id,
-	});
-
-	const projectsForMultiSelect = projects?.map(project => ({
-		label: project.name,
-		value: project.id as string,
-	}));
-
 	const specializationsForMultiSelect = specializations?.map(
 		specialization => ({
 			label: specialization.name,
@@ -76,7 +69,7 @@ export const CreateTask = () => {
 			currentTime: 0,
 			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
 			createdById: user!.id,
-			// projectId: searchParams.get('projectId') as string,
+			projectId: projectId as string
 		});
 	};
 
@@ -160,7 +153,7 @@ export const CreateTask = () => {
 							);
 						}}
 					/>
-					<Controller
+					{/* <Controller
 						control={control}
 						name='projectId'
 						render={({ field }) => {
@@ -172,7 +165,7 @@ export const CreateTask = () => {
 								/>
 							);
 						}}
-					/>
+					/> */}
 				</div>
 				<Button
 					loading={isPendingTaskLog}
