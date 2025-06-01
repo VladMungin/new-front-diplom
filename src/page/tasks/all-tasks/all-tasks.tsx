@@ -39,6 +39,10 @@ export const AllTasks = () => {
 				minSize: 10,
 			},
 			{
+				accessorKey: 'project.name',
+				header: 'Проект',
+			},
+			{
 				accessorKey: 'type.name',
 				header: 'Тип',
 			},
@@ -46,11 +50,11 @@ export const AllTasks = () => {
 				accessorKey: 'title',
 				header: 'Название',
 			},
+
 			{
 				accessorKey: 'status',
 				header: 'Статус',
 				Cell: ({ row }) => {
-					console.log(row);
 					return (
 						<p>
 							{
@@ -66,6 +70,16 @@ export const AllTasks = () => {
 			{
 				accessorKey: 'employee.fullName',
 				header: 'Исполнитель',
+				Cell: ({ row }) => {
+					return (
+						<Link
+							href={`/user/${row.original.employeeId}`}
+							className='underline text-(--mantine-color-blue-2)'
+						>
+							{row.original.employee?.fullName}
+						</Link>
+					);
+				},
 			},
 			{
 				accessorKey: 'createdBy.name',

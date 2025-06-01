@@ -27,3 +27,10 @@ export const loginToken = async (): Promise<AxiosResponse<AuthRequest>> =>
 			'Content-Type': 'application/json',
 		},
 	});
+
+export const deleteToken = async () =>
+	await baseApi.post('/auth/logout', undefined, {
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	});

@@ -13,6 +13,7 @@ export const LoginPage = () => {
 
 	const onSubmit: FormSubmitHandler<Auth> = async data => {
 		const result = await loginData.mutateAsync(data.data);
+		console.log(result);
 		setUser(result.user);
 	};
 

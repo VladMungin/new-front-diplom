@@ -13,11 +13,13 @@ import {
 	AccordionPanel,
 	AppShell,
 	Burger,
+	Button,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAtomValue } from 'jotai';
 import { usePathname, useRouter } from 'next/navigation';
 import { CgProfile } from 'react-icons/cg';
+import { IoMdExit } from 'react-icons/io';
 
 interface NavbarProps {
 	children: ReactNode;
@@ -27,7 +29,7 @@ const backup = () => baseApi.post('/backup');
 
 export const Navbar = ({ children }: NavbarProps) => {
 	// const [cookies, setCookie] = useCookies(['access_token']);
-	const { loginTokenData } = useAuth();
+	const { loginTokenData, logoutData } = useAuth();
 	const router = useRouter();
 	const firstRender = useRef(true);
 	const user = useAtomValue(userStore);
@@ -78,19 +80,22 @@ export const Navbar = ({ children }: NavbarProps) => {
 						/>
 					</svg>
 					<h1 className=' mt-1 font-bold'>Taskly</h1>
-					{/* Переместить в профиль */}
-					{/* <Switch
-            defaultChecked
-            label={colorScheme === 'dark' ? 'Темная' : 'Светлая'}
-            onChange={() => {
-              setColorScheme(colorScheme === 'dark' ? 'light' : 'dark')
-            }}
-						/> */}
 				</div>
-				<Link href='/profile' className='flex items-center gap-2 capitalize'>
-					{loginTokenData.data?.data.user.name}
-					<CgProfile className='w-[40px] h-[40px] cursor-pointer' />
-				</Link>
+				{pathname === '/profile' ? (
+					<Button
+						unstyled
+						onClick={() => {
+							logoutData.mutate();
+						}}
+					>
+						<IoMdExit size={44} />
+					</Button>
+				) : (
+					<Link href='/profile' className='flex items-center gap-2 capitalize'>
+						{loginTokenData.data?.data.user.name}
+						<CgProfile className='w-[40px] h-[40px] cursor-pointer' />
+					</Link>
+				)}
 			</AppShell.Header>
 
 			{!offNavbar && (

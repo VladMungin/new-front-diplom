@@ -15,7 +15,7 @@ export const CreateTask = () => {
 	const user = useAtomValue(userStore);
 	const adminId = useAtomValue(adminStore)
 	const searchParams = useSearchParams();
-	const projectId = searchParams.get('id');
+	const projectId = searchParams.get('projectId');
 
 	const { mutateAsync: createTaskLog, isPending: isPendingTaskLog } =
 		useCreateTaskLog();

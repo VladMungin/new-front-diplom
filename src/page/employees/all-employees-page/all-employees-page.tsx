@@ -1,8 +1,8 @@
 'use client';
 
 import { Employee, useGetEmployees } from '@/entities/employee';
-import { adminStore } from '@/entities/user';
-import { useAtomValue } from 'jotai';
+import { adminStore, userColumnOrderStore } from '@/entities/user';
+import { useAtom, useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
 import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
 import { useMemo, useState } from 'react';
@@ -31,6 +31,13 @@ export const AllEmployeesProjects = () => {
 	const [validationErrors, setValidationErrors] = useState<
 		Partial<Record<keyof Employee, string | undefined>>
 	>({});
+
+	const [columnOrder, setColumnOrder] = useAtom(userColumnOrderStore);
+
+	// Сохранение порядка колонок в localStorage при изменении
+	const handleColumnOrderChange = (newOrder: string[]) => {
+		setColumnOrder(newOrder);
+	};
 
 	const columns = useMemo<MRT_ColumnDef<Employee>[]>(
 		() => [
@@ -123,8 +130,10 @@ export const AllEmployeesProjects = () => {
 				columns={columns}
 				editDisplayMode='table'
 				enableEditing
+				onColumnOrderChange={handleColumnOrderChange}
 				state={{
-					isLoading,
+					isLoading: isLoading || !adminId,
+					columnOrder: columnOrder?.length ? columnOrder : [],
 				}}
 				localization={MRT_Localization_RU}
 				getRowId={row => row.id}
@@ -144,6 +153,7 @@ export const AllEmployeesProjects = () => {
 					},
 				}}
 				onEditingRowSave={handleSaveRow}
+				enableColumnOrdering
 			/>
 		</div>
 	);

@@ -1,7 +1,7 @@
 'use client';
 import { useGetEmployees } from '@/entities/employee';
 import { useCreateProject } from '@/entities/project';
-import { userStore } from '@/entities/user';
+import { adminStore } from '@/entities/user';
 import {
 	Button,
 	Card,
@@ -21,12 +21,12 @@ interface CreateProject {
 }
 
 export const ProjectCreate = () => {
-	const user = useAtomValue(userStore);
+	const adminId = useAtomValue(adminStore);
 
 	const { control } = useForm<CreateProject>();
 
-	const { data: employees } = useGetEmployees(user?.id || '', {
-		enabled: !!user?.id,
+	const { data: employees } = useGetEmployees(adminId || '', {
+		enabled: !!adminId,
 	});
 
 	const { mutateAsync: createProject, isPending } = useCreateProject();
@@ -45,7 +45,7 @@ export const ProjectCreate = () => {
 
 		await createProject({
 			...data,
-			userId: user!.id,
+			userId: adminId as string,
 			employeeIds,
 		});
 	};

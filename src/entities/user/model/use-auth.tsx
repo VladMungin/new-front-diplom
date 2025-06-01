@@ -2,14 +2,15 @@ import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'react-cookie';
-import { adminStore, userStore } from './_store';
+import { adminStore, companyStore, userStore } from './_store';
 import { Auth } from './_types';
-import { login, loginToken, register } from './api';
+import { deleteToken, login, loginToken, register } from './api';
 
 export const useAuth = () => {
 	const [cookies, setCookie] = useCookies(['access_token']);
 	const setUser = useSetAtom(userStore);
 	const setAdminId = useSetAtom(adminStore);
+	const setCompanyId = useSetAtom(companyStore);
 	const router = useRouter();
 
 	const isAuth = !!cookies.access_token;
@@ -23,7 +24,8 @@ export const useAuth = () => {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.user);
-			setAdminId(data.user.company.user[0].id);
+			setAdminId(data.user.company?.user[0].id || data.user.id);
+			setCompanyId(data.user.companyId);
 			router.push('/company/edit');
 		},
 	});
@@ -36,11 +38,12 @@ export const useAuth = () => {
 			setCookie('access_token', data.accessToken, {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
-
+			console.log(data);
 			setUser(data.user);
-			setAdminId(data.user.company.user[0].id);
+			setAdminId(data.user.company?.user[0].id || data.user.id);
+			setCompanyId(data.user.companyId);
 
-			router.push('/company/edit');
+			router.push('/');
 		},
 	});
 
@@ -53,7 +56,17 @@ export const useAuth = () => {
 				expires: new Date(Date.now() + 2 * 7 * 24 * 60 * 60 * 1000),
 			});
 			setUser(data.data.user);
-			setAdminId(data.data.user.company.user[0].id);
+			setAdminId(data.data.user.company?.user[0].id || data.data.user.id);
+			setCompanyId(data.data.user.companyId);
+		},
+	});
+
+	const logoutData = useMutation({
+		mutationFn: () => {
+			return deleteToken();
+		},
+		onSuccess: () => {
+			router.push('/auth/login');
 		},
 	});
 
@@ -62,5 +75,6 @@ export const useAuth = () => {
 		registerData,
 		loginData,
 		loginTokenData,
+		logoutData,
 	};
 };

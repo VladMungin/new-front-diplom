@@ -1,7 +1,7 @@
 'use client';
 import { useGetRoles, useGetSpecialization } from '@/entities/company';
 import { useCreateEmployee } from '@/entities/employee';
-import { userStore } from '@/entities/user';
+import { adminStore, companyStore } from '@/entities/user';
 import { Button, Card, CardSection, Input, Select } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
@@ -20,12 +20,13 @@ export type CreateEmployee = {
 };
 
 export const CreateEmployeePage = () => {
-	const user = useAtomValue(userStore);
-	const { data: roles } = useGetRoles(user?.id || '', {
-		enabled: !!user?.id,
+	const adminId = useAtomValue(adminStore);
+	const companyId = useAtomValue(companyStore);
+	const { data: roles } = useGetRoles(adminId || '', {
+		enabled: !!adminId,
 	});
-	const { data: specializations } = useGetSpecialization(user?.id || '', {
-		enabled: !!user?.id,
+	const { data: specializations } = useGetSpecialization(adminId || '', {
+		enabled: !!adminId,
 	});
 
 	const { mutateAsync } = useCreateEmployee();
@@ -48,8 +49,8 @@ export const CreateEmployeePage = () => {
 			.filter(item => item !== undefined)[0];
 		const res = await mutateAsync({
 			...data,
-			userId: user?.id,
-			companyId: user?.companyId,
+			userId: adminId as string,
+			companyId: companyId as string,
 			roleId: roleId,
 		});
 		console.log(res);
