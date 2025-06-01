@@ -10,9 +10,10 @@ import {
 	useGetProjectById,
 	useUpdateProject,
 } from '@/entities/project';
-import { groupTaskByType } from '@/entities/task';
+import { groupTaskByType, Task, transformTasksByStatus } from '@/entities/task';
 import { userStore } from '@/entities/user';
 import { chooseWordByNumber } from '@/shared/helpers';
+import { PieChart } from '@mantine/charts';
 import {
 	Box,
 	Button,
@@ -142,6 +143,15 @@ export const ProjectPage = () => {
 		});
 	}, [isEditable]);
 
+	const tasksStatusForStatistic = useMemo(() => {
+		if (project?.tasks) {
+			return transformTasksByStatus(project?.tasks as Task[]);
+		}
+		return [];
+	}, [project]);
+
+	console.log(tasksStatusForStatistic);
+
 	return (
 		<>
 			<Box pos='relative' mih='80vh'>
@@ -200,7 +210,7 @@ export const ProjectPage = () => {
 					/>
 				)}
 				<div className='grid w-full gap-5 mt-5 md:grid-cols-2 sm:grid-cols-1'>
-					<Card className='w-full ' withBorder>
+					<Card className='w-full' withBorder>
 						<CardSection withBorder className='!px-4 py-2'>
 							<Title order={3}>Задачи</Title>
 						</CardSection>
@@ -292,6 +302,30 @@ export const ProjectPage = () => {
 						</CardSection>
 					</Card>
 				</div>
+				<Card className='mt-5 '>
+					<CardSection>
+						<Title order={2} className='text-center'>
+							Статистика
+						</Title>
+					</CardSection>
+					<div className='flex'>
+						<div className=''>
+							<Title order={4} className='text-center'>
+								Статистика по статусам
+							</Title>
+							<PieChart
+								withLabelsLine
+								labelsPosition='outside'
+								labelsType='value'
+								withLabels
+								withTooltip
+								tooltipDataSource='segment'
+								mx='auto'
+								data={tasksStatusForStatistic}
+							/>
+						</div>
+					</div>
+				</Card>
 			</Box>
 			<Modal opened={opened} onClose={close} title='Участники' centered>
 				<Form control={control} className='min-h-[12vh] flex flex-col'>

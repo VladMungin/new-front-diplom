@@ -1,10 +1,10 @@
+import '@mantine/charts/styles.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import 'mantine-react-table/styles.css';
-import './index.css';
-
 import type { Metadata } from 'next';
 import { type ReactNode } from 'react';
+import './index.css';
 
 import { Navbar } from '@/widgets/navbar';
 

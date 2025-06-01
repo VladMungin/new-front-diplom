@@ -728,10 +728,10 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@mantine/charts@^7.17.4":
-  version "7.17.5"
-  resolved "https://registry.yarnpkg.com/@mantine/charts/-/charts-7.17.5.tgz#ac89074422b66acd10f6d1dbb31c024940401a43"
-  integrity sha512-VDDRwUqTsZYqYSYqcc8wXrdiKIvkqRcoDQXKdiuSin7ebQtk29QnPDQmcM536HQpVlUuemI7iTJNTUmhdc7ALQ==
+"@mantine/charts@^8.0.2":
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/@mantine/charts/-/charts-8.0.2.tgz#e69b84144122c3527d206fd140c6f8c1aab1081d"
+  integrity sha512-hVS1+CT+7e3+ZbU1xx7Nyx/5ZBSxzS+68SKeVLeOZPGl9Wx35CY1oLn0n53vQPWV2WFKd0u0Bq3d1iuaDpkzGA==
 
 "@mantine/core@^8.0.0":
   version "8.0.0"

@@ -8,3 +8,6 @@ export const getEmployees = async (userId: string): Promise<Employee[]> =>
 
 export const createEmployee = async (data: CreateEmployee): Promise<Employee> =>
 	await baseApi.post(`${targetEmployee}`, data);
+
+export const getEmployeeById = async (id: string): Promise<Employee> =>
+	(await baseApi(`/emplyee/${id}`)).data;
