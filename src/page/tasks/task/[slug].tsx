@@ -5,8 +5,9 @@ import {
 	getTextByStatus,
 	TASK_STATUS,
 	useGetTaskById,
-	useGetTaskLogAll,
 	useUpdateTask,
+	useUpdateTaskStatus,
+	useUpdateTaskTime,
 } from '@/entities/task';
 import { ReassignTaskModal } from '@/entities/task/ui/reassign-task-modal/reassign-task-modal';
 import { userStore } from '@/entities/user';
@@ -23,7 +24,12 @@ export const TaskPage = () => {
 	const { data: taskData, refetch } = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
-	const { data: taskLogAll } = useGetTaskLogAll();
+
+	const { mutateAsync: updateTaskTime } = useUpdateTaskTime(taskId as string);
+	const { mutateAsync: updateTaskStatus } = useUpdateTaskStatus(
+		taskId as string
+	);
+	const { mutateAsync, isPending } = useUpdateTask();
 
 	const {
 		seconds,
@@ -36,8 +42,6 @@ export const TaskPage = () => {
 	} = useStopwatch({ autoStart: false, interval: 20 });
 
 	const user = useAtomValue(userStore);
-
-	const { mutateAsync, isPending } = useUpdateTask();
 
 	useEffect(() => {
 		if (minutes && minutes % 15 === 0 && taskData) {
@@ -90,9 +94,10 @@ export const TaskPage = () => {
 							<Button
 								variant='default'
 								onClick={async () => {
-									await mutateAsync({
-										...taskData,
-										status: getNextStatus(taskData.status),
+									await updateTaskStatus({
+										data: {
+											status: getNextStatus(taskData.status),
+										},
 									});
 									await refetch();
 								}}
@@ -171,10 +176,11 @@ export const TaskPage = () => {
 								onClick={() => {
 									if (isRunning) {
 										pause();
-										mutateAsync(
+										updateTaskTime(
 											{
-												...taskData,
-												currentTime: totalMilliseconds + taskData.currentTime,
+												data: {
+													currentTime: totalMilliseconds + taskData.currentTime,
+												},
 											},
 											{
 												onSuccess: () => {

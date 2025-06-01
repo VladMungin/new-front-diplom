@@ -63,3 +63,17 @@ export interface TaskLog {
 	task: { id: number; title: string };
 	employee: { id: string; name: string };
 }
+
+export interface UpdateTaskStatusDto {
+	status: keyof typeof TASK_STATUS;
+}
+
+export interface UpdateTaskTimeDto {
+	currentTime: number;
+}
+
+export interface UpdateTaskEmployeeDto {
+	employeeId?: string | null;
+	autoSet?: boolean;
+	specializationId?: string;
+}

@@ -1,6 +1,15 @@
 import { baseApi } from '@/shared/api';
+import { AxiosResponse } from 'axios';
 import { targetTask, targetTaskLog } from './_constants';
-import { CreateTaskLogDto, Task, TaskLog, UpdateTaskLogDto } from './_types';
+import {
+	CreateTaskLogDto,
+	Task,
+	TaskLog,
+	UpdateTaskEmployeeDto,
+	UpdateTaskLogDto,
+	UpdateTaskStatusDto,
+	UpdateTaskTimeDto,
+} from './_types';
 
 export const createTask = async (data: Task): Promise<Task> =>
 	(await baseApi.post(targetTask, data)).data;
@@ -14,6 +23,39 @@ export const getTaskById = async (id: string): Promise<Task> =>
 export const updateTask = async (data: Task): Promise<Task> => {
 	const { id, ...dataWithoutId } = data;
 	return (await baseApi.patch(`${targetTask}/${id}`, dataWithoutId)).data;
+};
+
+export const updateTaskStatus = async (
+	id: string,
+	data: UpdateTaskStatusDto
+): Promise<Task> => {
+	const response: AxiosResponse<Task> = await baseApi.patch(
+		`${targetTask}/${id}/status`,
+		data
+	);
+	return response.data;
+};
+
+export const updateTaskTime = async (
+	id: string,
+	data: UpdateTaskTimeDto
+): Promise<Task> => {
+	const response: AxiosResponse<Task> = await baseApi.patch(
+		`${targetTask}/${id}/time`,
+		data
+	);
+	return response.data;
+};
+
+export const updateTaskEmployee = async (
+	id: string,
+	data: UpdateTaskEmployeeDto
+): Promise<Task> => {
+	const response: AxiosResponse<Task> = await baseApi.patch(
+		`${targetTask}/${id}/employee`,
+		data
+	);
+	return response.data;
 };
 
 // TASK LOG

@@ -1,7 +1,17 @@
 import { UseMutationConfig } from '@/shared/types';
-import { useMutation } from '@tanstack/react-query';
-import { Task, TaskLog, UpdateTaskLogDto } from './_types';
-import { updateTask, updateTaskLog } from './api';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import {
+	Task,
+	UpdateTaskEmployeeDto,
+	UpdateTaskStatusDto,
+	UpdateTaskTimeDto,
+} from './_types';
+import {
+	updateTask,
+	updateTaskEmployee,
+	updateTaskStatus,
+	updateTaskTime,
+} from './api';
 
 export const useUpdateTask = (config?: UseMutationConfig<Task>) => {
 	return useMutation({
@@ -10,9 +20,34 @@ export const useUpdateTask = (config?: UseMutationConfig<Task>) => {
 	});
 };
 
-export const useUpdateTaskLog = (config?: UseMutationConfig<TaskLog>) => {
+export const useUpdateTaskStatus = (
+	id: string
+): UseMutationResult<Task, Error, { data: UpdateTaskStatusDto }> => {
 	return useMutation({
-		mutationFn: (data: UpdateTaskLogDto) => updateTaskLog(data),
-		...config,
+		mutationFn: ({ data }) => updateTaskStatus(id, data),
+		onError: error => {
+			console.error('Failed to update task status:', error);
+		},
+	});
+};
+export const useUpdateTaskTime = (
+	id: string
+): UseMutationResult<Task, Error, { data: UpdateTaskTimeDto }> => {
+	return useMutation({
+		mutationFn: ({ data }) => updateTaskTime(id, data),
+		onError: error => {
+			console.error('Failed to update task time:', error);
+		},
+	});
+};
+
+export const useUpdateTaskEmployee = (
+	id: string
+): UseMutationResult<Task, Error, { data: UpdateTaskEmployeeDto }> => {
+	return useMutation({
+		mutationFn: ({ data }) => updateTaskEmployee(id, data),
+		onError: error => {
+			console.error('Failed to update task employee:', error);
+		},
 	});
 };
