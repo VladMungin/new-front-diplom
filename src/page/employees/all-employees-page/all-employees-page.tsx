@@ -1,6 +1,10 @@
 'use client';
 
-import { Employee, useGetEmployees } from '@/entities/employee';
+import {
+	Employee,
+	useGetEmployees,
+	useUpdateEmployee,
+} from '@/entities/employee';
 import { adminStore, userColumnOrderStore } from '@/entities/user';
 import { useAtom, useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
@@ -27,6 +31,8 @@ export const AllEmployeesProjects = () => {
 			enabled: !!adminId,
 		}
 	);
+
+	const { mutateAsync: updateEmployee } = useUpdateEmployee();
 
 	const [validationErrors, setValidationErrors] = useState<
 		Partial<Record<keyof Employee, string | undefined>>
@@ -140,6 +146,12 @@ export const AllEmployeesProjects = () => {
 				mantineEditTextInputProps={{
 					onBlur: async ({ target }) => {
 						const [id, name] = target.name.split('_'); // получение id employee
+						console.log(id);
+
+						await updateEmployee({
+							id,
+							[`${name}`]: target.value,
+						} as unknown as Employee);
 					},
 					onChange: async ({ target }) => {
 						const [id, name] = (target as HTMLInputElement)?.name.split(
