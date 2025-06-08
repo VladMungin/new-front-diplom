@@ -9,12 +9,19 @@ import {
 } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
-import { Task } from '../../model';
+import { Task, UpdateTaskEmployeeDto } from '../../model';
 
 interface ReassignTaskModalProps {
 	opened: boolean;
 	close: () => void;
-	mutateAsync: UseMutateAsyncFunction<Task, Error, Task, unknown>;
+	mutateAsync: UseMutateAsyncFunction<
+		Task,
+		Error,
+		{
+			data: UpdateTaskEmployeeDto;
+		},
+		unknown
+	>;
 	taskData: Task;
 	isLoading: boolean;
 	refetch: (
@@ -64,19 +71,9 @@ export const ReassignTaskModal = ({
 		label: type.name,
 	}));
 
-	const onSubmit: SubmitHandler<{
-		employeeId: string;
-		type: string;
-		specialization: string;
-	}> = async data => {
+	const onSubmit: SubmitHandler<UpdateTaskEmployeeDto> = async data => {
 		console.log(data);
-		await mutateAsync({
-			...taskData,
-			specializationId: data.specialization,
-			employeeId: data.employeeId,
-			typeOfTaskId: data.type,
-			status: 'PENDING',
-		});
+		await mutateAsync({ data });
 		refetch();
 	};
 
@@ -93,7 +90,7 @@ export const ReassignTaskModal = ({
 					}}
 				/>
 				<Controller
-					name='specialization'
+					name='specializationId'
 					control={control}
 					render={({ field }) => {
 						return (

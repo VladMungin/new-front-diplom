@@ -5,7 +5,7 @@ import {
 	getTextByStatus,
 	TASK_STATUS,
 	useGetTaskById,
-	useUpdateTask,
+	useUpdateTaskEmployee,
 	useUpdateTaskStatus,
 	useUpdateTaskTime,
 } from '@/entities/task';
@@ -29,7 +29,9 @@ export const TaskPage = () => {
 	const { mutateAsync: updateTaskStatus } = useUpdateTaskStatus(
 		taskId as string
 	);
-	const { mutateAsync, isPending } = useUpdateTask();
+	const { mutateAsync: updateTaskEmployee, isPending } = useUpdateTaskEmployee(
+		taskId as string
+	);
 
 	const {
 		seconds,
@@ -86,9 +88,7 @@ export const TaskPage = () => {
 							<span>
 								Создана от {new Date(taskData.createdAt).toLocaleDateString()}
 							</span>
-							<span>
-								Создал {taskData.createdBy.name}
-							</span>
+							<span>Создал {taskData.createdBy.name}</span>
 						</div>
 						<ButtonGroup className='mt-2'>
 							<Button
@@ -204,7 +204,7 @@ export const TaskPage = () => {
 			<ReassignTaskModal
 				close={close}
 				opened={opened}
-				mutateAsync={mutateAsync}
+				mutateAsync={updateTaskEmployee}
 				taskData={taskData}
 				isLoading={isPending}
 				refetch={refetch}
