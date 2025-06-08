@@ -1,14 +1,15 @@
 'use client';
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
-import { useGetEmployees } from '@/entities/employee';
+import { useGetEmployees, useGetNotBusyEmployee } from '@/entities/employee';
 import { Task, useCreateTask } from '@/entities/task';
 import { adminStore, userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
-import { Button, Card, Input, Select, Textarea } from '@mantine/core';
+import { Button, Card, Checkbox, Input, Select, Textarea } from '@mantine/core';
 import { TimePicker } from '@mantine/dates';
 import { useAtomValue } from 'jotai';
 import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 
 export const CreateTask = () => {
@@ -22,6 +23,8 @@ export const CreateTask = () => {
 	const { data: specializations } = useGetSpecialization(adminId as string, {
 		enabled: !!adminId,
 	});
+
+	console.log(specializations);
 
 	const { data: typeOfTasks } = useGetTypeOfTasks(adminId as string, {
 		enabled: !!adminId,
@@ -48,10 +51,13 @@ export const CreateTask = () => {
 		value: employee.id,
 	}));
 
-	const { control, handleSubmit } = useForm<Task>();
+	const { control, handleSubmit, watch, setValue } = useForm<Task>();
 
 	const onSubmit: SubmitHandler<Task> = async data => {
 		console.log(data);
+
+		delete data['should-get-not-busy-employee'];
+
 		await createTask({
 			...data,
 			currentTime: 0,
@@ -60,6 +66,23 @@ export const CreateTask = () => {
 			projectId: projectId as string,
 		});
 	};
+
+	const specializationId = watch('specializationId');
+	const shouldGetNotBusyEmployee = watch('should-get-not-busy-employee');
+	const { data: notBusyEmployee, refetch: refetchNotBusyEmployee } =
+		useGetNotBusyEmployee(specializationId, {
+			enabled: !!shouldGetNotBusyEmployee,
+		});
+
+	useEffect(() => {
+		if (shouldGetNotBusyEmployee) refetchNotBusyEmployee();
+	}, [specializationId]);
+
+	useEffect(() => {
+		if (notBusyEmployee) setValue('employeeId', notBusyEmployee.id);
+	}, [notBusyEmployee]);
+
+	console.log(notBusyEmployee);
 
 	return (
 		<Form control={control} className='w-full flex items-center justify-center'>
@@ -141,6 +164,24 @@ export const CreateTask = () => {
 							);
 						}}
 					/>
+					<Controller
+						name='should-get-not-busy-employee'
+						control={control}
+						render={({ field: { value, ...field } }) => {
+							return (
+								<Checkbox
+									{...field}
+									checked={value as boolean}
+									label='Автоматически выставить задачу на самого не занятого сотрудника'
+									disabled={!specializationId}
+									classNames={{
+										input: 'disabled:!border-[var(--mantine-color-dark-4)]',
+									}}
+								/>
+							);
+						}}
+					/>
+
 					{/* <Controller
 						control={control}
 						name='projectId'

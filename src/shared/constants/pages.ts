@@ -10,7 +10,7 @@ export const Pages: PagesI[] = [
 		items: [
 			{
 				label: 'Мои проекты',
-				href: '/projects',
+				href: '/project/my-projects',
 			},
 			{ label: 'Все проекты', href: '/project/all-projects' },
 			{ label: 'Создать проект', href: '/project/create' },

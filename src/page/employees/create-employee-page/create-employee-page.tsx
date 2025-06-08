@@ -34,9 +34,10 @@ export const CreateEmployeePage = () => {
 
 	const rolesForMultiSelect = roles?.map(role => role.name);
 
-	const specializationsForMultiSelect = specializations?.map(
-		specialization => specialization.name
-	);
+	const specializationsForMultiSelect = specializations?.map(specialization => ({
+		label: specialization.name,
+		value: specialization.id
+	}));
 
 	const onSubmit: FormSubmitHandler<CreateEmployee> = async ({ data }) => {
 		const roleId = roles
@@ -131,7 +132,7 @@ export const CreateEmployeePage = () => {
 
 				<Controller
 					control={control}
-					name='specialization'
+					name='specializationId'
 					render={({ field }) => {
 						return (
 							<Select

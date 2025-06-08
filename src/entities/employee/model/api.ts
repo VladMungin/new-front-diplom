@@ -15,3 +15,9 @@ export const getEmployeeById = async (id: string): Promise<Employee> =>
 export const updateEmployee = async (data: Partial<Employee>) => {
 	return (await baseApi.patch(`/emplyee/${data.id}`, data)).data;
 };
+
+export const getNotBusyEmployee = async (
+	specializationId: string
+): Promise<Employee> =>
+	(await baseApi(`${targetEmployee}/least-busy-employee/${specializationId}`))
+		.data;
