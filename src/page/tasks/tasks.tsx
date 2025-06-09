@@ -7,6 +7,8 @@ import {
 	AccordionControl,
 	AccordionItem,
 	AccordionPanel,
+	Box,
+	LoadingOverlay,
 } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { useMemo } from 'react';
@@ -14,7 +16,11 @@ import { useMemo } from 'react';
 export const TasksPage = () => {
 	const adminId = useAtomValue(adminStore);
 	const user = useAtomValue(userStore);
-	const { data: tasks } = useGetTasks(adminId as string, {
+	const {
+		data: tasks,
+		isLoading,
+		isFetched
+	} = useGetTasks(adminId as string, {
 		enabled: !!adminId,
 	});
 
@@ -34,36 +40,48 @@ export const TasksPage = () => {
 					{} as Record<string, Task[]>
 				);
 		} else {
-			return null;
+			return {};
 		}
 	}, [tasks]);
 
+	console.log(isLoading);
+
 	return (
-		<div className='space-y-6'>
-			<Accordion
-				classNames={{
-					content:
-						'!grid sm:!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 !gap-5',
-				}}
-			>
-				{Object.entries(tasksByProject || {}).map(
-					([projectName, projectTasks]) => (
-						<AccordionItem key={projectName} value={projectName}>
-							<AccordionControl>
-								<h2 className='text-xl font-bold '>{projectName}</h2>
-							</AccordionControl>
-							<AccordionPanel className=''>
-								{projectTasks.map(task => (
-									<TaskCard
-										task={task}
-										key={`${task.id}-${task?.project?.name}`}
-									/>
-								))}
-							</AccordionPanel>
-						</AccordionItem>
-					)
-				)}
-			</Accordion>
-		</div>
+		<Box pos='relative' mih='100vh'>
+			<LoadingOverlay
+				visible={!isFetched}
+				zIndex={1000}
+				overlayProps={{ radius: 'sm', blur: 2 }}
+			/>
+			{Object.keys(tasksByProject).length === 0 && isFetched && (
+				<p>Задач нет, отдыхай :)</p>
+			)}
+			<div className='space-y-6'>
+				<Accordion
+					classNames={{
+						content:
+							'!grid sm:!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3 !gap-5',
+					}}
+				>
+					{Object.entries(tasksByProject || {}).map(
+						([projectName, projectTasks]) => (
+							<AccordionItem key={projectName} value={projectName}>
+								<AccordionControl>
+									<h2 className='text-xl font-bold '>{projectName}</h2>
+								</AccordionControl>
+								<AccordionPanel className=''>
+									{projectTasks.map(task => (
+										<TaskCard
+											task={task}
+											key={`${task.id}-${task?.project?.name}`}
+										/>
+									))}
+								</AccordionPanel>
+							</AccordionItem>
+						)
+					)}
+				</Accordion>
+			</div>
+		</Box>
 	);
 };

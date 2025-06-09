@@ -12,7 +12,7 @@ export const ProjectTasksPage = () => {
 	const { data } = useGetProjectById(projectId as string);
 
 	return (
-		<div className='grid grid-cols-3'>
+		<div className='grid grid-cols-3 gap-5'>
 			{data?.tasks.map(task => <TaskCard task={task} key={task.id} />)}
 		</div>
 	);
