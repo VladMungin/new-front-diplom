@@ -68,7 +68,7 @@ export const getTaskLogAll = async () => {
 	return (await baseApi(targetTaskLog)).data;
 };
 
-export const getTaskLogById = async (id: string): Promise<TaskLog> => {
+export const getTaskLogById = async (id: number): Promise<TaskLog> => {
 	return (await baseApi(`${targetTaskLog}/${id}`)).data;
 };
 

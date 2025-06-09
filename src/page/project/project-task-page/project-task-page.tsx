@@ -12,8 +12,31 @@ export const ProjectTasksPage = () => {
 	const { data } = useGetProjectById(projectId as string);
 
 	return (
-		<div className='grid grid-cols-3 gap-5'>
-			{data?.tasks.map(task => <TaskCard task={task} key={task.id} />)}
+		<div className='overflow-x-auto'>
+			<div className='grid grid-cols-7 gap-1 px-2 min-w-[900px]'>
+				<p className=''># Номер</p>
+				<p>Тип задачи</p>
+				<p className='ml-3'>Статус</p>
+				<p>Тема</p>
+				<p className='w-[80px]'>Затраченное время</p>
+				<p className='w-[80px]'>Запланированное время</p>
+				<p className='ml-4 w-[80px]'>Исполнитель</p>
+			</div>
+			<div className='min-w-[900px]'>
+				{data?.tasks.map((task, index) => (
+					<TaskCard
+						index={index}
+						task={{
+							...task,
+							employee: data.employees.find(
+								employee => task.employeeId === employee.id
+							),
+						}}
+						needWorker
+						key={task.id}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

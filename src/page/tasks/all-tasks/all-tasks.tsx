@@ -1,20 +1,17 @@
 'use client';
 
 import { Task, TASK_STATUS, useGetTasks } from '@/entities/task';
-import { adminStore, userStore } from '@/entities/user';
+import { adminStore } from '@/entities/user';
 import { useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
 import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
 export const AllTasks = () => {
-	const user = useAtomValue(userStore);
 	const adminId = useAtomValue(adminStore);
-	const router = useRouter();
 
-	const { data: tasksData, isLoading } = useGetTasks(adminId as string, {
+	const { data: tasksData, isFetched } = useGetTasks(adminId as string, {
 		enabled: !!adminId,
 	});
 
@@ -89,7 +86,7 @@ export const AllTasks = () => {
 		[]
 	);
 
-	if (!tasksData?.length) {
+	if (!tasksData?.length && isFetched) {
 		return <div>Задач нет, отдыхай :)</div>;
 	}
 	return (
@@ -98,14 +95,9 @@ export const AllTasks = () => {
 				data={tasksData || []}
 				columns={columns}
 				state={{
-					isLoading,
+					isLoading: !isFetched,
 				}}
 				localization={MRT_Localization_RU}
-				// mantineTableBodyRowProps={({ row }) => ({
-				// 	onClick: () => {
-				// 		router.push(`/tasks/task/${row.original.id}`);
-				// 	},
-				// })}
 			/>
 		</div>
 	);

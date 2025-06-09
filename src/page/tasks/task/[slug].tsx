@@ -5,6 +5,7 @@ import {
 	getTextByStatus,
 	TASK_STATUS,
 	useGetTaskById,
+	useGetTaskLogById,
 	useUpdateTaskEmployee,
 	useUpdateTaskStatus,
 	useUpdateTaskTime,
@@ -28,6 +29,12 @@ export const TaskPage = () => {
 	} = useGetTaskById(taskId as string, {
 		enabled: !!taskId,
 	});
+
+	const { data: taskLog } = useGetTaskLogById(taskData?.id as number, {
+		enabled: !!taskData?.id,
+	});
+
+	console.log(taskLog);
 
 	const { mutateAsync: updateTaskTime } = useUpdateTaskTime(taskId as string);
 	const { mutateAsync: updateTaskStatus, isPending: isPendingStatus } =
@@ -82,14 +89,15 @@ export const TaskPage = () => {
 		return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')} часа`;
 	};
 
-	const timeToCompleatFormatted = formatHoursMinutes(taskData.timeToCompleat);
-	const currentTimeFormatted = formatHoursMinutes(taskData.currentTime);
+	if (!!taskData) {
+		const timeToCompleatFormatted = formatHoursMinutes(taskData.timeToCompleat);
+		const currentTimeFormatted = formatHoursMinutes(taskData.currentTime);
 
-	// Форматируем время в 00:00:00
-	const formatTime = (time: number) => {
-		return time.toString().padStart(2, '0');
-	};
-	if (taskData)
+		// Форматируем время в 00:00:00
+		const formatTime = (time: number) => {
+			return time.toString().padStart(2, '0');
+		};
+
 		return (
 			<>
 				<div className='min-h-screen bg-gray-800 font-sans'>
@@ -102,7 +110,7 @@ export const TaskPage = () => {
 								<span>
 									Создана от {new Date(taskData.createdAt).toLocaleDateString()}
 								</span>
-								<span>Создал {taskData.createdBy.name}</span>
+								<span>Создал {taskData?.createdBy?.name || ''}</span>
 							</div>
 							<ButtonGroup className='mt-2'>
 								<Button
@@ -120,7 +128,11 @@ export const TaskPage = () => {
 								>
 									{getTextByStatus(taskData.status)}
 								</Button>
-								<Button variant='default' onClick={open}>
+								<Button
+									variant='default'
+									onClick={open}
+									disabled={taskData.status !== 'DONE'}
+								>
 									Перевести задачу
 								</Button>
 							</ButtonGroup>
@@ -152,7 +164,7 @@ export const TaskPage = () => {
 										</div>
 										<div className='flex'>
 											<span className='font-medium w-1/3'>Тип:</span>
-											<span>{taskData.type.name}</span>
+											<span>{taskData.type?.name}</span>
 										</div>
 										<div className='flex'>
 											<span className='font-medium w-1/3'>Специализация:</span>
@@ -231,4 +243,5 @@ export const TaskPage = () => {
 				/>
 			</>
 		);
+	}
 };

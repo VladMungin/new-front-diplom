@@ -10,10 +10,10 @@ export const createEmployee = async (data: CreateEmployee): Promise<Employee> =>
 	await baseApi.post(`${targetEmployee}`, data);
 
 export const getEmployeeById = async (id: string): Promise<Employee> =>
-	(await baseApi(`/emplyee/${id}`)).data;
+	(await baseApi(`${targetEmployee}/${id}`)).data;
 
 export const updateEmployee = async (data: Partial<Employee>) => {
-	return (await baseApi.patch(`/emplyee/${data.id}`, data)).data;
+	return (await baseApi.patch(`${targetEmployee}/${data.id}`, data)).data;
 };
 
 export const getNotBusyEmployee = async (

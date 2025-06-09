@@ -26,7 +26,7 @@ export const useGetTaskLogAll = (config?: UseQueryConfig<TaskLog>) =>
 	});
 
 export const useGetTaskLogById = (
-	id: string,
+	id: number,
 	config?: UseQueryConfig<TaskLog>
 ) =>
 	useQuery({
