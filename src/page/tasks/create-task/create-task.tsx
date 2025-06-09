@@ -29,11 +29,11 @@ export const CreateTask = () => {
 	const user = useAtomValue(userStore);
 	const adminId = useAtomValue(adminStore);
 	const searchParams = useSearchParams();
-	const projectId = searchParams.get('projectId');
+	const { control, handleSubmit, watch, setValue } = useForm<CreateTask>();
+	const projectId = searchParams.get('projectId') || watch('projectId');
 
 	const { mutateAsync: createTask, isPending } = useCreateTask();
 
-	const { control, handleSubmit, watch, setValue } = useForm<CreateTask>();
 	const specializationId = watch('specializationId');
 
 	const { data: specializations } = useGetSpecialization(adminId as string, {
@@ -144,6 +144,21 @@ export const CreateTask = () => {
 							return <Textarea size='lg' label='Описание *' {...field} />;
 						}}
 					/>
+					{!projectId && (
+						<Controller
+							control={control}
+							name='projectId'
+							render={({ field }) => {
+								return (
+									<Select
+										data={projectsForMultiSelect}
+										{...field}
+										label='Проект *'
+									/>
+								);
+							}}
+						/>
+					)}
 					<Controller
 						control={control}
 						name='specializationId'
@@ -226,22 +241,6 @@ export const CreateTask = () => {
 							);
 						}}
 					/>
-
-					{!projectId && (
-						<Controller
-							control={control}
-							name='projectId'
-							render={({ field }) => {
-								return (
-									<Select
-										data={projectsForMultiSelect}
-										{...field}
-										label='Проект *'
-									/>
-								);
-							}}
-						/>
-					)}
 				</div>
 				<Button
 					loading={isPending}
