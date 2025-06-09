@@ -2,7 +2,7 @@
 import { useGetRoles, useGetSpecialization } from '@/entities/company';
 import { useCreateEmployee } from '@/entities/employee';
 import { adminStore, companyStore } from '@/entities/user';
-import { Button, Card, CardSection, Input, Select } from '@mantine/core';
+import { Button, Card, CardSection, ComboboxItem, Input, Select } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { Controller, Form, FormSubmitHandler, useForm } from 'react-hook-form';
 import { AiOutlineLoading } from 'react-icons/ai';
@@ -13,7 +13,7 @@ export type CreateEmployee = {
 	phone: string;
 	password: string;
 	companyId?: string;
-	specialization?: string;
+	specializationId?: string;
 	userId?: string;
 	role?: string;
 	roleId?: string;
@@ -37,7 +37,7 @@ export const CreateEmployeePage = () => {
 	const specializationsForMultiSelect = specializations?.map(specialization => ({
 		label: specialization.name,
 		value: specialization.id
-	}));
+	})) as ComboboxItem[];
 
 	const onSubmit: FormSubmitHandler<CreateEmployee> = async ({ data }) => {
 		const roleId = roles

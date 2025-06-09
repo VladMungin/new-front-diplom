@@ -2,15 +2,28 @@
 
 import { useGetSpecialization, useGetTypeOfTasks } from '@/entities/company';
 import { useGetEmployees, useGetNotBusyEmployee } from '@/entities/employee';
+import { useGetProjects } from '@/entities/project';
 import { Task, useCreateTask } from '@/entities/task';
 import { adminStore, userStore } from '@/entities/user';
 import { timeToMilliseconds } from '@/shared/lib';
-import { Button, Card, Checkbox, Input, Select, Textarea } from '@mantine/core';
+import {
+	Button,
+	Card,
+	Checkbox,
+	Input,
+	Select,
+	Textarea,
+	Tooltip,
+} from '@mantine/core';
 import { TimePicker } from '@mantine/dates';
 import { useAtomValue } from 'jotai';
 import { useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
+
+interface CreateTask extends Partial<Task> {
+	'should-get-not-busy-employee'?: boolean;
+}
 
 export const CreateTask = () => {
 	const user = useAtomValue(userStore);
@@ -20,17 +33,22 @@ export const CreateTask = () => {
 
 	const { mutateAsync: createTask, isPending } = useCreateTask();
 
+	const { control, handleSubmit, watch, setValue } = useForm<CreateTask>();
+	const specializationId = watch('specializationId');
+
 	const { data: specializations } = useGetSpecialization(adminId as string, {
 		enabled: !!adminId,
 	});
-
-	console.log(specializations);
 
 	const { data: typeOfTasks } = useGetTypeOfTasks(adminId as string, {
 		enabled: !!adminId,
 	});
 
 	const { data: employees } = useGetEmployees(adminId as string, {
+		enabled: !!adminId,
+	});
+
+	const { data: projects } = useGetProjects(adminId as string, {
 		enabled: !!adminId,
 	});
 
@@ -46,14 +64,31 @@ export const CreateTask = () => {
 		value: typeOfTask.id as string,
 	}));
 
-	const employeesForMultiSelect = employees?.map(employee => ({
-		label: employee.fullName,
-		value: employee.id,
+	const employeesForMultiSelect = useMemo(() => {
+		if (specializationId) {
+			return employees
+				?.filter(employee => {
+					if (employee.specializationId === specializationId) {
+						return employee;
+					}
+				})
+				?.map(employee => ({
+					label: employee.fullName,
+					value: employee.id,
+				}));
+		}
+		return employees?.map(employee => ({
+			label: employee.fullName,
+			value: employee.id,
+		}));
+	}, [employees, specializationId]);
+
+	const projectsForMultiSelect = projects?.map(project => ({
+		label: project.name,
+		value: project.id,
 	}));
 
-	const { control, handleSubmit, watch, setValue } = useForm<Task>();
-
-	const onSubmit: SubmitHandler<Task> = async data => {
+	const onSubmit: SubmitHandler<CreateTask> = async data => {
 		console.log(data);
 
 		delete data['should-get-not-busy-employee'];
@@ -64,13 +99,12 @@ export const CreateTask = () => {
 			timeToCompleat: timeToMilliseconds(String(data.timeToCompleat)),
 			createdById: user!.id,
 			projectId: projectId as string,
-		});
+		} as Task);
 	};
 
-	const specializationId = watch('specializationId');
 	const shouldGetNotBusyEmployee = watch('should-get-not-busy-employee');
 	const { data: notBusyEmployee, refetch: refetchNotBusyEmployee } =
-		useGetNotBusyEmployee(specializationId, {
+		useGetNotBusyEmployee(specializationId as string, {
 			enabled: !!shouldGetNotBusyEmployee,
 		});
 
@@ -169,32 +203,45 @@ export const CreateTask = () => {
 						control={control}
 						render={({ field: { value, ...field } }) => {
 							return (
-								<Checkbox
-									{...field}
-									checked={value as boolean}
-									label='Автоматически выставить задачу на самого не занятого сотрудника'
-									disabled={!specializationId}
-									classNames={{
-										input: 'disabled:!border-[var(--mantine-color-dark-4)]',
+								<Tooltip
+									arrowSize={4}
+									withArrow
+									label={<p>Сначала выберите специализацию</p>}
+									events={{
+										hover: !specializationId,
+										focus: !specializationId,
+										touch: !specializationId,
 									}}
-								/>
+								>
+									<Checkbox
+										{...field}
+										checked={value as boolean}
+										label='Автоматически выставить задачу на самого не занятого сотрудника'
+										disabled={!specializationId}
+										classNames={{
+											input: 'disabled:!border-[var(--mantine-color-dark-4)]',
+										}}
+									/>
+								</Tooltip>
 							);
 						}}
 					/>
 
-					{/* <Controller
-						control={control}
-						name='projectId'
-						render={({ field }) => {
-							return (
-								<Select
-									data={projectsForMultiSelect}
-									{...field}
-									label='Проект *'
-								/>
-							);
-						}}
-					/> */}
+					{!projectId && (
+						<Controller
+							control={control}
+							name='projectId'
+							render={({ field }) => {
+								return (
+									<Select
+										data={projectsForMultiSelect}
+										{...field}
+										label='Проект *'
+									/>
+								);
+							}}
+						/>
+					)}
 				</div>
 				<Button
 					loading={isPending}

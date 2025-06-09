@@ -47,9 +47,8 @@ export const TaskPage = () => {
 
 	useEffect(() => {
 		if (minutes && minutes % 15 === 0 && taskData) {
-			mutateAsync({
-				...taskData,
-				currentTime: totalMilliseconds + taskData.currentTime,
+			updateTaskTime({
+				data: { currentTime: totalMilliseconds + taskData.currentTime },
 			});
 		}
 	}, [minutes]);
@@ -119,6 +118,10 @@ export const TaskPage = () => {
 									О задаче
 								</h2>
 								<div className='space-y-3 text-sm text-white'>
+									<div className='flex'>
+										<span className='font-medium w-1/3'>Исполнитель:</span>
+										<span>{taskData.employee?.fullName}</span>
+									</div>
 									<div className='flex'>
 										<span className='font-medium w-1/3'>Статус:</span>
 										<span>
