@@ -42,7 +42,7 @@ export const LoginPage = () => {
 							}}
 						/>
 					</Input.Wrapper>
-					<Input.Wrapper label='Имя'>
+					{/* <Input.Wrapper label='Имя'>
 						<Controller
 							name='name'
 							control={control}
@@ -50,7 +50,7 @@ export const LoginPage = () => {
 								return <Input {...field} />;
 							}}
 						/>
-					</Input.Wrapper>
+					</Input.Wrapper> */}
 					<Input.Wrapper label='Пароль'>
 						<Controller
 							name='password'
@@ -60,7 +60,7 @@ export const LoginPage = () => {
 							}}
 						/>
 					</Input.Wrapper>
-					<Input.Wrapper label='Название компании'>
+					{/* <Input.Wrapper label='Название компании'>
 						<Controller
 							name='companyName'
 							control={control}
@@ -68,7 +68,7 @@ export const LoginPage = () => {
 								return <Input {...field} />;
 							}}
 						/>
-					</Input.Wrapper>
+					</Input.Wrapper> */}
 					<Button fullWidth type='submit'>
 						{loginData.isPending ? (
 							<AiOutlineLoading className='animate-spin' />
