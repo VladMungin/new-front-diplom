@@ -13,7 +13,6 @@ export const TaskCard = ({
 	index,
 	needWorker = false,
 }: TaskCardProps) => {
-	console.log(task);
 	const formatHoursMinutes = (milliseconds: number) => {
 		const totalSeconds = Math.floor(milliseconds / 1000);
 		const totalMinutes = Math.floor(totalSeconds / 60);
