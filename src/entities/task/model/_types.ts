@@ -15,6 +15,7 @@ export interface Task {
 	currentTime: number;
 	typeOfTaskId: string;
 	specializationId: string;
+	taskLogs?: TaskLog[];
 	employee?: Employee;
 	project?: Project;
 	specialization?: Specialization;
@@ -59,9 +60,11 @@ export interface TaskLog {
 	id: string;
 	taskId: number;
 	employeeId: string;
+	createdAt: string;
 	hoursWorked: number | null;
 	task: { id: number; title: string };
-	employee: { id: string; name: string };
+	employee: { id: string; fullName: string };
+	action?: string;
 }
 
 export interface UpdateTaskStatusDto {

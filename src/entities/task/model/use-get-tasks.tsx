@@ -1,6 +1,6 @@
 import { UseQueryConfig } from '@/shared/types';
 import { useQuery } from '@tanstack/react-query';
-import { keyTasksGet, keyTasksLogGet } from './_constants';
+import { keyTasksGet, keyTasksLogGet, targetTaskLog } from './_constants';
 import { Task, TaskLog } from './_types';
 import { getTaskById, getTaskLogAll, getTaskLogById, getTasks } from './api';
 
@@ -31,6 +31,6 @@ export const useGetTaskLogById = (
 ) =>
 	useQuery({
 		queryFn: () => getTaskLogById(id),
-		queryKey: keyTasksGet,
+		queryKey: [targetTaskLog, 'log-by-id'],
 		...config,
 	});

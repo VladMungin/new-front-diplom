@@ -9,3 +9,11 @@ export enum TASK_STATUS {
 	'IN_WORK' = 'В работе',
 	'DONE' = 'Выполнено',
 }
+
+export enum TASK_ACTION {
+	CREATE = 'create',
+	CHANGE_EMPLOYEE = 'change_employee',
+	CHANGE_STATUS = 'change_status',
+	CHANGE_TIME = 'change_time',
+	DELETE = 'delete',
+}
