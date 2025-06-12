@@ -20,10 +20,12 @@ export function TaskLog({ taskLogs }: { taskLogs: TaskLog[] }) {
 		(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
 	);
 
+	console.log(taskLogs)
+
 	const getLogText = (taskLog: TaskLog) => {
 		switch (taskLog.action) {
 			case TASK_ACTION.CREATE:
-				return `Задача была создана на ${taskLog.employee.fullName}`;
+				return `Исполнителем был назначен ${taskLog.employee.fullName}`;
 			case TASK_ACTION.CHANGE_TIME:
 				return `Время выполнения задачи было обновлено на ${formatHoursMinutes(taskLog.hoursWorked || 0)}`;
 			case TASK_ACTION.CHANGE_STATUS:

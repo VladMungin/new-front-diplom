@@ -16,6 +16,9 @@ export const updateEmployee = async (data: Partial<Employee>) => {
 	return (await baseApi.patch(`${targetEmployee}/${data.id}`, data)).data;
 };
 
+export const deleteEmployee = async (id: string): Promise<Employee> =>
+	(await baseApi.delete(targetEmployee + id)).data;
+
 export const getNotBusyEmployee = async (
 	specializationId: string
 ): Promise<Employee> =>
