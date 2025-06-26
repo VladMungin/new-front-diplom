@@ -1,4 +1,4 @@
-import { userStore } from '@/entities/user';
+import {roleStore, userStore} from '@/entities/user';
 import { Button, ButtonGroup } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
@@ -21,6 +21,8 @@ export function TaskHeader({
 	const params = useParams();
 	const taskId = params.slug;
 
+	const role = useAtomValue(roleStore);
+
 	const { mutateAsync: updateTaskStatus, isPending: isPendingStatus } =
 		useUpdateTaskStatus(taskId as string);
 	const { mutateAsync: updateTaskEmployee, isPending } = useUpdateTaskEmployee(
@@ -29,6 +31,7 @@ export function TaskHeader({
 
 	const [opened, { open, close }] = useDisclosure(false);
 
+	console.log(taskData.status !== 'DONE' && !role?.canEditTask)
 	if (!taskData) return <>task undefined</>;
 	return (
 		<div className='bg-gray-700 border-b border-gray-400 shadow-sm'>
@@ -61,7 +64,7 @@ export function TaskHeader({
 					<Button
 						variant='default'
 						onClick={open}
-						disabled={taskData.status !== 'DONE'}
+						disabled={taskData.status !== 'DONE' && !role?.canEditTask}
 					>
 						Перевести задачу
 					</Button>

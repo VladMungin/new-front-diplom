@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { ReactNode, useEffect, useRef } from 'react';
 
-import { useAuth, userStore } from '@/entities/user';
+import {roleStore, useAuth, userStore} from '@/entities/user';
 import { baseApi } from '@/shared/api';
 import { Pages } from '@/shared/constants';
 import {
@@ -11,9 +11,9 @@ import {
 	AccordionControl,
 	AccordionItem,
 	AccordionPanel,
-	AppShell,
+	AppShell, Box,
 	Burger,
-	Button,
+	Button, LoadingOverlay,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useAtomValue } from 'jotai';
@@ -50,6 +50,8 @@ export const Navbar = ({ children }: NavbarProps) => {
 
 	const offNavbar =
 		pathname.includes('/auth') || pathname.includes('company/edit');
+
+	const role = useAtomValue(roleStore)
 
 	return (
 		<AppShell
@@ -91,7 +93,7 @@ export const Navbar = ({ children }: NavbarProps) => {
 						<IoMdExit size={44} />
 					</Button>
 				) : (
-					<Link href='/profile' className='flex items-center gap-2 capitalize'>
+					<Link href={role?.name === 'admin' ? '/profile' : `/user/${user?.id}`} className='flex items-center gap-2 capitalize'>
 						{loginTokenData.data?.data.user.name}
 						<CgProfile className='w-[40px] h-[40px] cursor-pointer' />
 					</Link>
@@ -149,7 +151,13 @@ export const Navbar = ({ children }: NavbarProps) => {
 				</AppShell.Navbar>
 			)}
 
-			<AppShell.Main>{children}</AppShell.Main>
+			<AppShell.Main>
+				<Box pos="relative">
+					<LoadingOverlay visible={loginTokenData.isPending} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+
+				{children}
+				</Box>
+			</AppShell.Main>
 		</AppShell>
 	);
 };
