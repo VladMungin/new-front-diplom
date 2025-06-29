@@ -11,7 +11,7 @@ export const RegisterPage = () => {
 	const { registerData } = useAuth();
 
 	const onSubmit: FormSubmitHandler<Auth> = async data => {
-		const result = await registerData.mutateAsync(data.data);
+		await registerData.mutateAsync(data.data);
 	};
 
 	return (

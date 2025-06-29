@@ -22,7 +22,6 @@ export const EditTypeOfTaskModal = () => {
 
 	const {
 		fields: typeOfTasks,
-		append: addTypeOfTask,
 		remove: removeTypeOfTask,
 	} = useFieldArray({
 		control,

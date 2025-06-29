@@ -27,7 +27,6 @@ export const EditSpecializationModal = () => {
 
 	const {
 		fields: specializations,
-		append: addSpecializations,
 		remove: removeSpecializations,
 	} = useFieldArray({
 		control,

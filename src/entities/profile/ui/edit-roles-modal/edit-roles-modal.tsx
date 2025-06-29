@@ -21,7 +21,6 @@ export const EditRolesModal = () => {
 
 	const {
 		fields: roles,
-		append: addRole,
 		remove: removeRole,
 	} = useFieldArray({
 		control,

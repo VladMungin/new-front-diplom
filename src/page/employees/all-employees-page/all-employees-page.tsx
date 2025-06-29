@@ -157,6 +157,7 @@ export const AllEmployeesProjects = () => {
 						const [id, name] = (target as HTMLInputElement)?.name.split(
 							'_'
 						) as [string, keyof Employee]; // получение id employee
+						console.log(id);
 						await handleSaveRow({
 							values: {
 								[name]: (target as HTMLInputElement)?.value,
