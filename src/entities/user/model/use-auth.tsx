@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
-import { useRouter } from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 import { useCookies } from 'react-cookie';
 import {adminStore, companyStore, roleStore, userStore} from './_store';
 import { Auth } from './_types';
@@ -16,6 +16,8 @@ export const useAuth = () => {
 	const setCompanyId = useSetAtom(companyStore);
 	const setRoles = useSetAtom(roleStore)
 	const router = useRouter();
+	const pathname = usePathname()
+
 
 	const isAuth = !!cookies.access_token;
 
@@ -66,7 +68,10 @@ export const useAuth = () => {
 			setRoles(roles.find(role => role.id === data.data.user.roleId) as Role);
 		},
 		onError: () => {
+			if(pathname !== '/auth/login' && pathname !== '/auth/register'){
+
 			router.push('/auth/login');
+			}
 		},
 	});
 

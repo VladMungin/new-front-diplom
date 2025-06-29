@@ -60,7 +60,7 @@ export const UserPage = () => {
 							<h2 className='text-lg font-semibold text-white border-b  pb-2 mb-4'>
 								Получение статистике по сотруднику
 							</h2>
-							
+
 							{Object.entries(taskLog || {}).map(([key, value]) => {
 								return (
 									<div key={key}>

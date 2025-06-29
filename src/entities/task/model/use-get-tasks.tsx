@@ -18,11 +18,12 @@ export const useGetTaskById = (id: string, config?: UseQueryConfig<Task>) =>
 		...config,
 	});
 
-export const useGetTaskLogAll = (config?: UseQueryConfig<TaskLog>) =>
+export const useGetTaskLogAll = (config?: UseQueryConfig<TaskLog[]>) =>
 	useQuery({
 		queryFn: () => getTaskLogAll(),
 		queryKey: keyTasksLogGet,
 		...config,
+
 	});
 
 export const useGetTaskLogById = (
