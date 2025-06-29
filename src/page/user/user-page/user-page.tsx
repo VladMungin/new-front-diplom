@@ -1,8 +1,8 @@
 'use client';
 import { useGetEmployeeById } from '@/entities/employee';
-import { Button, ButtonGroup } from '@mantine/core';
 import { useParams } from 'next/navigation';
-import {TaskLog, useGetTaskLogAll} from "@/entities/task";
+import { useGetTaskLogAll} from "@/entities/task";
+import {TaskLog} from "@/entities/task/model/_types";
 import {useEffect, useState} from "react";
 import {formatMillisecondsToHHMM, groupAndSortByMonth} from "@/shared/lib";
 
@@ -67,7 +67,7 @@ export const UserPage = () => {
 										<h3 className='text-lg font-semibold text-white border-b  pb-2 mb-4'>
 											{key} {formatMillisecondsToHHMM(value.reduce((acc, item) => {
 												console.log(item)
-												return acc+=item.hoursWorked
+												return acc+=item.hoursWorked as number
 										}, 0))}
 										</h3>
 
