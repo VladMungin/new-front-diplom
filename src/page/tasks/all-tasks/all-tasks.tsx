@@ -21,6 +21,7 @@ export const AllTasks = () => {
 			{
 				accessorKey: 'id',
 				header: '№',
+	// @ts-expect-error
 				mantineEditTextFieldProps: ({ row }) => console.log(row),
 				Cell: ({ row }) => {
 					return (
