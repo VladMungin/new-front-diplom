@@ -1,7 +1,7 @@
 import {TaskLog} from "@/entities/task/model/_types";
 
 export function groupAndSortByMonth(data: TaskLog[]) {
-	const grouped = {};
+	const grouped: Record<string, unknown[]> = {};
 
 	// Группируем данные по году-месяцу
 	data.forEach(item => {
@@ -20,7 +20,7 @@ export function groupAndSortByMonth(data: TaskLog[]) {
 	const sortedKeys = Object.keys(grouped).sort();
 
 	// Создаем новый объект с отсортированными ключами
-	const result = {};
+	const result:Record<string, unknown[]> = {};
 	sortedKeys.forEach(key => {
 		result[key] = grouped[key];
 	});
