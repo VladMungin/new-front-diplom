@@ -8,7 +8,6 @@ import {
 import { adminStore, userColumnOrderStore } from '@/entities/user';
 import { useAtom, useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
-// @ts-expect-error
 import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
 import { useMemo, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
