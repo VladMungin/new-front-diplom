@@ -8,10 +8,11 @@ import {
 import { adminStore, userColumnOrderStore } from '@/entities/user';
 import { useAtom, useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
-import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
+// import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
 import { useMemo, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import * as yup from 'yup';
+import {MRT_Localization_RU} from 'mantine-react-table/locales/ru/index.cjs';
 
 // Схема валидации для сотрудника
 const employeeValidationSchema = yup.object().shape({
