@@ -4,7 +4,8 @@ import { Task, TASK_STATUS, useGetTasks } from '@/entities/task';
 import { adminStore } from '@/entities/user';
 import { useAtomValue } from 'jotai';
 import { MantineReactTable, MRT_ColumnDef } from 'mantine-react-table';
-import { MRT_Localization_RU } from 'mantine-react-table/locales/ru';
+import {MRT_Localization_RU} from 'mantine-react-table/locales/ru/index.cjs';
+
 import Link from 'next/link';
 import { useMemo } from 'react';
 
