@@ -1,7 +1,7 @@
 import type { TaskLog } from '../../model';
 import { TASK_ACTION } from '../../model';
 
-export function TaskLog({ taskLogs }: { taskLogs: TaskLog[] }) {
+export function TaskLogBlock({ taskLogs }: { taskLogs: TaskLog[] }) {
 	const formatHoursMinutes = (milliseconds: number) => {
 		const totalSeconds = Math.floor(milliseconds / 1000);
 		const totalMinutes = Math.floor(totalSeconds / 60);

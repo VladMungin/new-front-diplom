@@ -157,7 +157,7 @@ export const CreateTaskForm = () => {
 		});
 
 	useEffect(() => {
-		if (shouldGetNotBusyEmployee) refetchNotBusyEmployee();
+		if (shouldGetNotBusyEmployee) refetchNotBusyEmployee().then();
 	}, [specializationId]);
 
 	useEffect(() => {

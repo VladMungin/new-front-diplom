@@ -3,7 +3,7 @@
 import {
 	TaskDescription,
 	TaskHeader,
-	TaskLog,
+	TaskLogBlock,
 	TaskTimer,
 	useGetTaskById,
 } from '@/entities/task';
@@ -45,7 +45,7 @@ export const TaskPage = () => {
 					<div className='max-w-7xl mx-auto flex flex-col gap-10 py-6'>
 						<TaskDescription taskData={taskData} />
 						<TaskTimer taskData={taskData} refetch={refetch} />
-						<TaskLog taskLogs={taskData.taskLogs || []} />
+						<TaskLogBlock taskLogs={taskData.taskLogs || []} />
 					</div>
 				</div>
 			</>

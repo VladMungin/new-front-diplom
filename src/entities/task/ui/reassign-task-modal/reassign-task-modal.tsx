@@ -33,7 +33,6 @@ export const ReassignTaskModal = ({
 	opened,
 	close,
 	mutateAsync,
-	taskData,
 	isLoading,
 	refetch,
 }: ReassignTaskModalProps) => {
