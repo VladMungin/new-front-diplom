@@ -39,7 +39,7 @@ export const ReassignTaskModal = ({
 	const { control, handleSubmit } = useForm<{
 		employeeId: string;
 		type: string;
-		specialization: string;
+		specializationId: string;
 	}>();
 	const adminId = useAtomValue(adminStore);
 
